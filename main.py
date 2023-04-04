@@ -1,6 +1,6 @@
-from modulos.clientes.addClients import *
-from modulos.clientes.getClients import *
-from modulos.clientes.doPurchase import *
+from modulos.clientes.addClients import addClients
+from modulos.clientes.getClients import getClients
+from modulos.clientes.doPurchase import doPurchase
 from os import system
 
 option=0
@@ -9,7 +9,7 @@ while(option != 4):
     while (True):
 
         system("cls")
-        print("\n****** Menu ****** \n\n1. Cargar cliente \n2. Imprimir Clientes \n3. Ejemplo de factura \n4. Salir")
+        print("\n****** Menu ****** \n\n1. Cargar cliente \n2. Imprimir Clientes \n3. Ejemplo de aviso por compra \n4. Salir")
         try:
             option = int(input("\n            Ingresa opción: "))
             if(option == 1):

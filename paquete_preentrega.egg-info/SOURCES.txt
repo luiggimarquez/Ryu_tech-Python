@@ -1,0 +1,12 @@
+setup.py
+modulos/__init__.py
+modulos/Preentrega_1/__init__.py
+modulos/clientes/__init__.py
+modulos/clientes/addClients.py
+modulos/clientes/clientes.py
+modulos/clientes/doPurchase.py
+modulos/clientes/getClients.py
+paquete_preentrega.egg-info/PKG-INFO
+paquete_preentrega.egg-info/SOURCES.txt
+paquete_preentrega.egg-info/dependency_links.txt
+paquete_preentrega.egg-info/top_level.txt
