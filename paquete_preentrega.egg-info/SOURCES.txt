@@ -1,6 +1,8 @@
 setup.py
 modulos/__init__.py
+modulos/Preentrega_1/Primera pre-entrega Marquez.ipynb
 modulos/Preentrega_1/__init__.py
+modulos/Preentrega_1/datos.json
 modulos/clientes/__init__.py
 modulos/clientes/addClients.py
 modulos/clientes/clientes.py

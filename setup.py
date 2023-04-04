@@ -6,6 +6,7 @@ setup(
     description ="Paquete que contiene la primera preentrega y la segunda, la segunda consiste en una clase Cliente con metodos y atributos",
     author="Luiggi Marquez",
     author_email="nf_snake@hotmail.com",
-    packages=find_packages()
+    package_data={'': ['*.ipynb','*.json']},
+    packages=find_packages(),
 
 )
