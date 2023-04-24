@@ -1,0 +1,42 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+    <h2>Formulario para buscar Cursadas</h2>
+
+    {% if error %}
+        <h3 class="errorData">{{error}}</h3>
+    {% endif %}
+    
+    <form class="estudiantes" action="/busqueda/" method="POST">
+        {% csrf_token %}
+        <div><label> Introduce Cursada: </label><input type="number" name="busqueda"></div>
+        <div class="button1"><button class="btn41-43 btn-41">Buscar</button></div>
+    </form>
+
+   
+  
+    {% if consulta %}
+
+        {% for x in consulta %}
+            {{x.numero_cursada }}
+            {{x.curso}}
+            {{x.docente}}
+                {% for y in x.alumnos.all %}
+                        {{y}}
+                {% endfor %}
+        {% endfor %}
+
+    {% endif %}
+
+    {% if empty %}
+        <div>No existe el dato consultado</div>
+    {% endif %}
+
+        
+    
+        
+
+
+{% endblock %}
+

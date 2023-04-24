@@ -1,0 +1,18 @@
+{% extends "index.html" %}
+
+{% block content %}
+ 
+    <h2> Formulario para cargar profesores</h2>
+
+    {% if error %}
+        <h3 class="errorData">{{error}}</h3>
+    {% endif %}
+
+    <form class="estudiantes" action="/profesores/" method="POST">
+        {% csrf_token %}
+        {{form.as_div}}
+        <div class="button1"><button class="btn41-43 btn-41">Guardar</button></div>
+    </form>
+
+
+{% endblock %}
