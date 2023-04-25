@@ -22,10 +22,20 @@ def estudiantes(request):
         })
     
     else: 
-        try:
-            form = EstudiantesForm(request.POST)
+        
+        form = EstudiantesForm(request.POST)
+        if(form.is_valid()):
             form.save()
-        except:
+            return render(request, "estudiantes.html", {
+                'form' : EstudiantesForm, 'saved': 'Datos almacenados correctamente' 
+            })
+
+        else:
+            return render(request, "estudiantes.html", {
+                'form' : EstudiantesForm, 'errors': form.errors 
+            })
+
+        """ except:
             #Si hay dato publicado renderiza el form con el mensaje de error
             return render(request, "estudiantes.html", {
             'form' : EstudiantesForm, 'error': 'Correo/DNI ya registrado' 
@@ -33,7 +43,7 @@ def estudiantes(request):
         #Si no hay error renderiza nuevamente el formulario normal
         return render(request, "estudiantes.html", {
             'form' : EstudiantesForm 
-        })
+        }) """
     
 
 def profesores(request):
@@ -65,48 +75,53 @@ def cursos(request):
         })
     else:
 
-        """ try:
-            form= CursosForm(request.POST)
-            form.save()
-        except:
-            return render(request, "cursos.html",{
-                'form': CursosForm, 'error': 'Correo/DNI ya registrado'
-            }) """
-        
-        print(request.POST)
-        form= CursosForm(request.POST )
-        x = form.save(commit=False)
-        x.save()
-        form.save_m2m()
+        form= CursosForm(request.POST ) 
+        if (form.is_valid()):
+  
+            x = form.save(commit=False)
+            x.save()
+            form.save_m2m()
 
-        return render(request, "cursos.html",{
-                'form': CursosForm
+            return render(request, "cursos.html",{
+                'form': CursosForm, 'saved': "Datos almacenados correctamente"
+            })
+        else:
+            print('invalido')
+            return render(request, "cursos.html",{
+                'form': CursosForm, 'errors': form.errors
             })
 
-        
-        return render(request, "cursos.html",{
-            'form': CursosForm
-        })
 
 def busqueda(request):
 
-    
-    if(request.method == 'GET'):
+    print(request.GET)
+    if(request.GET != {}):
 
-        return render(request, 'busqueda.html')
-        
+        try:
+            empty = False
+            consulta = Curso.objects.filter(numero_cursada = request.GET['busqueda'])
+            
+            if(len(consulta) == 0):
+                empty = True
+
+            return render(request, 'busqueda.html', {
+                'consulta' : consulta, 'empty' : empty
+            })
+        except:
+            return render(request, 'busqueda.html', {
+                'error' : 'Se ha producido un error'
+            })
     else:
+        print("vacio")
+        return render(request, 'busqueda.html' )
+
+   
+    """ else:
         try:
             empty = False
             consulta = Curso.objects.filter(numero_cursada = request.POST['busqueda'])
             #print("Ejemplo", request.POST['busqueda'])
-            """ for x in consulta:
-                print (x.numero_cursada)
-                print (x.curso)
-                print(x.docente)
-                for y in x.alumnos.all():
-                    print(y)
-            """
+            
             if(len(consulta) == 0):
                 empty = True
 
@@ -118,4 +133,4 @@ def busqueda(request):
             return render(request, 'busqueda.html', {
 
                 'error' : 'Se ha producido un error'
-            })
+            }) """

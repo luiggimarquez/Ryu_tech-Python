@@ -8,14 +8,12 @@
         <h3 class="errorData">{{error}}</h3>
     {% endif %}
     
-    <form class="estudiantes" action="/busqueda/" method="POST">
+    <form class="estudiantes" action="/busqueda/" method="GET">
         {% csrf_token %}
         <div><label> Introduce Cursada: </label><input type="number" name="busqueda"></div>
         <div class="button1"><button class="btn41-43 btn-41">Buscar</button></div>
     </form>
 
-   
-  
     {% if consulta %}
 
         {% for x in consulta %}
