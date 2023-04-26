@@ -20,5 +20,3 @@ class CursosForm(ModelForm):
     class Meta:
         model = Curso
         fields = ['curso','numero_cursada', 'docente','alumnos']
-
-

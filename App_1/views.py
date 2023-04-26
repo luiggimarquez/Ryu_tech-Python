@@ -158,5 +158,4 @@ def busqueda(request):
                 'error' : 'Se ha producido un error, respuesta en blanco o dato incorrecto'
             })
     else:
-        print("vacio")
         return render(request, 'busqueda.html' )
