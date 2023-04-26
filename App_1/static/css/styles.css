@@ -28,6 +28,14 @@ h1{
     margin: auto;
 }
 
+h2{
+    padding: 10px 0;
+}
+
+h3, h4{
+
+    margin: 10px 0;
+}
 .estudiantes{
     background-color: #8080805c;
     margin: 20px 20px;
@@ -49,6 +57,22 @@ h1{
 
     color: green;
 }
+.estilosBox{
+
+    background-color: rgba(128, 128, 128, 0.15);
+    border: 1px solid rgba(61, 61, 61, 0.3);
+    color: rgb(0, 0, 0);
+    margin: 5px 0;
+}
+
+.about{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    margin: 20px 0;
+    font-size: larger;
+}
 
 .button1{
 
@@ -57,7 +81,7 @@ h1{
 
 }
 .btn41-43 {
-    padding: 10px 25px;
+    padding: 6px 20px;
     font-family: "Roboto", sans-serif;
     font-weight: 500;
     background: black;
@@ -101,7 +125,10 @@ h1{
     top: 2px;
   }
 
+.login{
 
+    margin-left: 10px;
+}
 
 footer, .text-reset{
     color:white;

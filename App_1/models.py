@@ -10,7 +10,10 @@ class Estudiantes (models.Model):
     email = models.EmailField(max_length=100, unique=True)
 
     def __str__ (self):
-        return f"{self.name} {self.lastname}" 
+        return f"{self.name} {self.lastname}"
+    
+    class Meta:
+        verbose_name_plural = "Estudiantes"
 
 
 class Profesores (models.Model):
@@ -21,7 +24,10 @@ class Profesores (models.Model):
     profesion = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.name} {self.lastname}" 
+        return f"{self.name} {self.lastname}"
+
+    class Meta:
+        verbose_name_plural = "Profesores" 
     
 
 class Curso (models.Model):
@@ -29,7 +35,10 @@ class Curso (models.Model):
     curso = models.CharField(max_length=100)
     numero_cursada = models.IntegerField(unique=True)
     docente = models.ForeignKey(Profesores, null=True, blank=True, on_delete=models.CASCADE)
-    alumnos = models.ManyToManyField(Estudiantes)
+    alumnos = models.ManyToManyField(Estudiantes, blank=True)
     
     def __str__(self):
         return f"{self.curso}"
+    
+    class Meta:
+        verbose_name_plural = "Cursos"

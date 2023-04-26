@@ -4,8 +4,12 @@
  
     <h2> Formulario para cargar profesores</h2>
 
-    {% if error %}
-        <h3 class="errorData">{{error}}</h3>
+    {% if errors %}
+    <h3 class="errorData">Error: tipo de datos inválidos o ya registrados (DNI/Correo)</h3>
+    {% endif %}
+
+    {% if saved %}
+        <h3 class="savedData">{{saved}}</h3>
     {% endif %}
 
     <form class="estudiantes" action="/profesores/" method="POST">

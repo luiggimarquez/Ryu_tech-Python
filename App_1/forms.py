@@ -16,7 +16,7 @@ class ProfesoresForm(ModelForm):
 class CursosForm(ModelForm):
     alumnos = forms.ModelMultipleChoiceField(
                         queryset=Estudiantes.objects.all().order_by('name'),
-                        widget=forms.CheckboxSelectMultiple)
+                        widget=forms.CheckboxSelectMultiple,required=False)
     class Meta:
         model = Curso
         fields = ['curso','numero_cursada', 'docente','alumnos']

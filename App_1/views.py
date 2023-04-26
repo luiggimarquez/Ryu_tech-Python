@@ -1,28 +1,87 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import EstudiantesForm, ProfesoresForm, CursosForm
 from .models import Curso
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def base(request):
     hero = True
     return render(request, 'index.html',{
-        'hero': hero
+            'hero': hero, 'about':True
     })
-    
+
 
 def signup(request):
-    return render(request, "signUp.html")
 
+    if(request.user.is_authenticated):
+        return redirect('home')
+    else:
+
+        if (request.method == 'GET'):
+            return render(request, "signUp.html",{
+            'form': UserCreationForm
+            })
+        else:
+
+            if(request.POST['password1'] == request.POST['password2']):
+                try:
+                    user = User.objects.create_user(username=request.POST['username'].lower(), password=request.POST['password1'])
+                    user.save()
+                    login(request, user)
+                    return redirect('home')
+                except:
+                    return render(request, "signUp.html",{
+                    'form': UserCreationForm, 'errors':'Usuario ya Existe'
+                    })
+
+            else:
+                return render(request, "signUp.html",{
+                'form': UserCreationForm, 'errors':'Password no coinciden'
+                })
+
+@login_required         
+def log_out(request):
+    logout(request)
+    return redirect('home')
+
+
+def log_in(request):
+
+    if(request.user.is_authenticated):
+        return redirect('home')
+    else:
+        if(request.method == 'GET'):
+
+            return render(request, "login.html",{
+                'form': AuthenticationForm
+            })
+        else:
+
+            user = authenticate(request,username=request.POST['username'].lower(), password=request.POST['password'])
+
+            if(user is None):
+                return render(request, "login.html",{
+                'form': AuthenticationForm, 'errors':"Usuario/Password erróneo"
+            })
+            else:
+                login(request, user)
+                return redirect('home')
+
+@login_required    
 def estudiantes(request):
 
     if(request.method == 'GET'):
-   
+    
         return render(request, "estudiantes.html", {
             'form' : EstudiantesForm 
         })
-    
-    else: 
         
+    else: 
+            
         form = EstudiantesForm(request.POST)
         if(form.is_valid()):
             form.save()
@@ -35,17 +94,7 @@ def estudiantes(request):
                 'form' : EstudiantesForm, 'errors': form.errors 
             })
 
-        """ except:
-            #Si hay dato publicado renderiza el form con el mensaje de error
-            return render(request, "estudiantes.html", {
-            'form' : EstudiantesForm, 'error': 'Correo/DNI ya registrado' 
-        })
-        #Si no hay error renderiza nuevamente el formulario normal
-        return render(request, "estudiantes.html", {
-            'form' : EstudiantesForm 
-        }) """
-    
-
+@login_required
 def profesores(request):
 
     if(request.method == 'GET'):
@@ -53,20 +102,18 @@ def profesores(request):
             'form': ProfesoresForm
         })
     else:
-        try:
-            form = ProfesoresForm(request.POST)
+        form = ProfesoresForm(request.POST)
+        if(form.is_valid()):
             form.save()
-        except:
-             #Si hay dato publicado renderiza el form con el mensaje de error
             return render(request, "profesores.html",{
-            'form': ProfesoresForm, 'error': 'Correo/DNI ya registrado'
+                'form': ProfesoresForm, 'saved':"Datos almacenados correctamente"
+            })
+        else:
+            return render(request, "profesores.html",{
+            'form': ProfesoresForm, 'errors': form.errors
         })
-        #Si no hay error renderiza nuevamente el formulario normal
-        return render(request, "profesores.html",{
-            'form': ProfesoresForm
-        })
-
-
+     
+@login_required
 def cursos(request):
 
     if(request.method == 'GET'):
@@ -91,10 +138,9 @@ def cursos(request):
                 'form': CursosForm, 'errors': form.errors
             })
 
-
+@login_required
 def busqueda(request):
 
-    print(request.GET)
     if(request.GET != {}):
 
         try:
@@ -109,28 +155,8 @@ def busqueda(request):
             })
         except:
             return render(request, 'busqueda.html', {
-                'error' : 'Se ha producido un error'
+                'error' : 'Se ha producido un error, respuesta en blanco o dato incorrecto'
             })
     else:
         print("vacio")
         return render(request, 'busqueda.html' )
-
-   
-    """ else:
-        try:
-            empty = False
-            consulta = Curso.objects.filter(numero_cursada = request.POST['busqueda'])
-            #print("Ejemplo", request.POST['busqueda'])
-            
-            if(len(consulta) == 0):
-                empty = True
-
-            return render(request, 'busqueda.html', {
-
-                'consulta' : consulta, 'empty' : empty
-            })
-        except:
-            return render(request, 'busqueda.html', {
-
-                'error' : 'Se ha producido un error'
-            }) """
