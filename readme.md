@@ -45,7 +45,7 @@ Esto nos ubica en la carpeta creada para el proyecto en el terminal
 
 * Escribir del comando `git clone`, pegar el URL del repositorio después  y presionar enter, esto nos crea una carpeta del proyecto llamada **Ryu-Tech-Python**. En el terminal escribimos `cd Ryu-Tech-Python` para entrar en el root del proyecto.
 
-* Crear un entorno virtual entrando en la consola/terminal: ´py -m venv venv´ en Windows; para Mac escribir `python3 -m venv venv`
+* Crear un entorno virtual entrando en la consola/terminal: `py -m venv venv` en Windows; para Mac escribir `python3 -m venv venv`
 
 * Activar el entorno virtual creado con: `.\venv\Scripts\activate` para windows, para Mac usar `source venv/bin/activate` (si da access denied elevar con SUDO) 
 
