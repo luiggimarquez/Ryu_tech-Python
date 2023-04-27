@@ -47,14 +47,23 @@ Esto nos ubica en la carpeta creada para el proyecto en el terminal
 
 * Crear un entorno virtual entrando en la consola/terminal: `py -m venv venv` en Windows; para Mac escribir `python3 -m venv venv`
 
-* Activar el entorno virtual creado con: `.\venv\Scripts\activate` para windows, para Mac usar `source venv/bin/activate` (si da access denied elevar con SUDO) 
+* Activar el entorno virtual creado con: `.\venv\Scripts\activate` para windows, para Mac usar `source venv/bin/activate` (si da access denied elevar con SUDO)
 
-* Instalar los paquetes/librerías usados en el proyecto con: `pip install -r "requirements.txt"` 
+Si al ejecutar el **activate** por powerShell en windows se genera un error de permisos, ejecutar en powerShell: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
+* Instalar los paquetes/librerías usados en el proyecto con: `pip install -r "requirements.txt"`
+
+Si en esta parte se presenta un error al intentar instalar, posiblemente el problema es PIP, se pueden ejecutar estos dos comandos:
+
+1. `curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`
+2. `python get-pip.py`
+
+
 
 * Estando ubicados en el root del proyecto (Ryu_tech-Python/) Compila con `py manage.py runserver` en windows, en Mac con ` python3 manage.py runserver`  
 
 
-Ya podemos acceder en el navegador con el localhost o http://127.0.0.1:8000/ . En caso de tener el puerto ocuado, se puede ejecutar con `py manage.py runserver XXXX` donde XXXX es el puerto que se desee usar
+Ya podemos acceder en el navegador con el localhost o http://127.0.0.1:8000/ . En caso de tener el puerto ocupado, se puede ejecutar con `py manage.py runserver XXXX` donde XXXX es el puerto que se desee usar
 
 
 
