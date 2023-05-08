@@ -1,0 +1,36 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <h4>Perfil de usuario</h4>
+    <div>
+
+        <p>Usuario: {{request.user.username}}</p>
+        <p>Nombre: {{request.user.first_name}}</p>
+        <p>Apellido: {{request.user.last_name}}</p>
+        <p>Email: {{request.user.email}}</p>
+        <p>Bio: {{request.user.profile.bio}}</p>
+        <p>website: {{request.user.profile.link}}</p>
+        
+    </div>
+
+    
+    <div>
+        <h5>Editar perfil de usuario</h5>
+
+       <form action="/profile/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+
+        <div class="button1"><button class="btn41-43 btn-41">Actualizar</button></div>
+       </form>
+        
+    </div>
+   
+    {% if empty %}
+        <div>No existe el dato consultado</div>
+    {% endif %}
+        <div class="button1">
+            <a href="{% url 'home' %}"><button  class="btn41-43 btn-41">Ir a Home</button></a>
+        </div>
+    </div>
+{% endblock %}
