@@ -7,7 +7,9 @@ urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("logout/", views.log_out, name= "logout"),
     path("login/", views.log_in , name = "login"),
-    path("profile/", views.profile.as_view(), name = "profile")
+    path("profile/", views.profile, name = "profile"),
+    path("user/edit/", views.edituser,  name = "edituser"),
+    path("profile/edit/", views.editprofile.as_view(), name = "editprofile")
 ]
 
 if settings.DEBUG:

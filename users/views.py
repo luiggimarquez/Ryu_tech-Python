@@ -4,9 +4,11 @@ from .forms import UserRegisterForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from .models import Profile
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
+from .forms import editUserForm
 
 @login_required
 def base(request):
@@ -61,7 +63,7 @@ def log_out(request):
     logout(request)
     return redirect('home')
 
-
+@never_cache
 def log_in(request):
 
     if(request.user.is_authenticated):
@@ -83,18 +85,56 @@ def log_in(request):
             else:
                 login(request, user)
                 return redirect('home')
+
+def profile(request):
+   return render(request, "profile.html")           
+
+@login_required           
+def edituser(request):
+    user = request.user
+    if (request.method == 'GET'):
+            return render(request, "edituser.html",{
+            'form': editUserForm(user=request.user)
+            })
+    else:
+        
+        form = editUserForm(request.POST,user=request.user)
+    
+        if form.is_valid():
+            info = form.cleaned_data
+            print("mail: ", info['email'])
+            if(info['email'] != "") : user.email = info['email']
+            if(info['first_name'] != "") : user.first_name = info['first_name']
+            if(info['last_name'] != "") : user.last_name = info['last_name']
+            if(((info['password1'] != '') and (info['password2'] != ''))) : user.set_password(info['password1'])
             
-class profile(UpdateView):
+            if(((info['password1'] != '') and (info['password2'] == "")) or ((info['password1'] == '') and (info['password2'] != ""))):
+                return render(request,"edituser.html", {
+                'form': editUserForm, 'errors':'Passwords deben ser iguales'
+                })
+
+            user.save()
+            login(request, user)
+            return redirect('home')
+        
+        return render(request,"edituser.html", {
+            'form': editUserForm, 'errors':form.errors
+        })
+         
+             
+          
+class editprofile(UpdateView):
    
-    template_name = 'profile.html'
+    template_name = 'editprofile.html'
     model = Profile
-    fields = [ 'avatar', 'bio', 'link', 'first_name']
-    success_url = reverse_lazy('profile')
+    fields = [ 'avatar', 'bio', 'link']
+    success_url = reverse_lazy('editprofile')
 
     def get_object(self):
         profile, created = Profile.objects.get_or_create(user = self.request.user)
         return profile
-    
+
+
     """
      if(request.user.is_authenticated):
         print(request.user.userprofile.username)

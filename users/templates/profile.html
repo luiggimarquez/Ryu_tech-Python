@@ -1,36 +1,35 @@
 {% extends "index.html" %}
+{% load static %}
 
 {% block content %}
     <h4>Perfil de usuario</h4>
     <div>
+        {% if request.user.profile.avatar %}
+        <p>{{ request.user.profile.avatar }}</p>
+        {% else %}
+        <img src={% static 'images/no-avatar.jpg' %}>
+        {% endif %}
 
         <p>Usuario: {{request.user.username}}</p>
+        {% if request.user.first_name %}
         <p>Nombre: {{request.user.first_name}}</p>
+        {% endif %}
+        {% if request.user.last_name %}
         <p>Apellido: {{request.user.last_name}}</p>
+        {% endif %}
         <p>Email: {{request.user.email}}</p>
+        {% if equest.user.profile.bio %}
         <p>Bio: {{request.user.profile.bio}}</p>
+        {% endif %}
+        {% if request.user.profile.link %}
         <p>website: {{request.user.profile.link}}</p>
+        {% endif %}
         
     </div>
 
-    
-    <div>
-        <h5>Editar perfil de usuario</h5>
-
-       <form action="/profile/" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{form.as_p}}
-
-        <div class="button1"><button class="btn41-43 btn-41">Actualizar</button></div>
-       </form>
-        
-    </div>
-   
-    {% if empty %}
-        <div>No existe el dato consultado</div>
-    {% endif %}
         <div class="button1">
-            <a href="{% url 'home' %}"><button  class="btn41-43 btn-41">Ir a Home</button></a>
+            <a href="{% url 'edituser' %}"><button  class="btn41-43 btn-41">Cambiar password y datos de la cuenta</button></a>
+            <a href="{% url 'editprofile' %}"><button  class="btn41-43 btn-41">Editar perfil</button></a>
         </div>
     </div>
 {% endblock %}
