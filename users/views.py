@@ -33,12 +33,9 @@ def signup(request):
             if(request.POST['password1'] == request.POST['password2']):
                 try:
                     form = UserRegisterForm(request.POST)
-                    print(form)
-                    print("por entrar")
                     if form.is_valid():
-                        print("entro")
+                        form.clean_email()
                         info = form.cleaned_data
-                        print(info)
                         user = User.objects.create_user(username=str(info['username']).lower(), password=str(info['password1']), first_name=str(info['first_name']), last_name=str(info['last_name']), email=str(info['email']))
                         user.save()
                         login(request, user)
@@ -102,15 +99,15 @@ def edituser(request):
     
         if form.is_valid():
             info = form.cleaned_data
-            print("mail: ", info['email'])
-            if(info['email'] != "") : user.email = info['email']
-            if(info['first_name'] != "") : user.first_name = info['first_name']
-            if(info['last_name'] != "") : user.last_name = info['last_name']
+            form.clean_email()
+            user.email = info['email']
+            user.first_name = info['first_name']
+            user.last_name = info['last_name']
+
             if(((info['password1'] != '') and (info['password2'] != ''))) : user.set_password(info['password1'])
-            
-            if(((info['password1'] != '') and (info['password2'] == "")) or ((info['password1'] == '') and (info['password2'] != ""))):
+            if(info['password1'] != info['password2'] ):
                 return render(request,"edituser.html", {
-                'form': editUserForm, 'errors':'Passwords deben ser iguales'
+                'form': editUserForm(user=request.user), 'errors':'No puede quedar en blanco ningún campo de Password'
                 })
 
             user.save()
@@ -118,7 +115,7 @@ def edituser(request):
             return redirect('home')
         
         return render(request,"edituser.html", {
-            'form': editUserForm, 'errors':form.errors
+            'form': editUserForm(user=request.user), 'errors':form.errors
         })
          
              

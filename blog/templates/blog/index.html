@@ -46,24 +46,10 @@
     
     <main class="content">
 
-      {% if hero %}
-        <img class="hero" src="{% static 'images/hero.jpg' %}">
-      {% endif %}
 
       {% block content %}
       {% endblock %}
       
-
-      {% if about %}
-
-        <section id="about">
-			<div class="about">
-				<p>Esta página es una preentrega del curso de Python de CoderHouse, en esta podemos registrar cursadas, estudiantes y profesores</p>
-				<p>También realiza una busqueda de los datos de la cursada</p>
-				<p>Ha sido realizada con Django</p>
-			</div>
-        </section>
-      {% endif %}
 
     </main>
 
