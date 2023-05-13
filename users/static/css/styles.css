@@ -149,3 +149,31 @@ footer ul{
     width: 5% ;
 }
 
+.listBlogs{
+width: 50%;
+}
+
+.card{
+    text-align-last: center;
+    height: 395px;
+}
+
+.card-title {
+    text-align: center;
+    min-height: 72px;
+}
+
+.imgBlog {
+    max-height: 150px;
+    max-width: 260px;
+    margin-top: 5px;
+    align-self: center;
+}
+
+.card-text {
+    min-height: 72px;
+}
+
+.card-footer {
+    text-align: center;
+}

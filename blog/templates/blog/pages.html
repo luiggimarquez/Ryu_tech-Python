@@ -1,0 +1,49 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+    <h2 class="text-lg-start shadow-sm p-3 mt-5 bg-body-tertiary rounded">Lista de Publicaciones</h2>
+
+    {% if pages %}
+
+    <div class="container-fluid listBlogs">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            
+            
+            {% for data in pages %}
+            <div class="col">
+                <div class="card">
+                    <img src="{{ data.imageMain.url }}" class="card-img-top img-fluid imgBlog" alt="imagen de {{data.title}}">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ data.title }}</h5>
+                    <p class="card-text">{{ data.subtitle }}</p>
+                    <a href="{% url 'details' data.id %}" class="btn btn-primary">Leer más...</a>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    {% if data.dateModified %}
+                        <small class="text-body-secondary">Last updated: {{ data.dateModified }}</small>
+                    {% else %}
+                        <small class="text-body-secondary">Creado: {{ data.dateAdded}}</small>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+
+
+        </div>
+    </div>
+
+
+    {% else %}
+
+    <h2 class="text-lg-start shadow-sm p-3 mt-5 bg-body-tertiary rounded">Aun no tenemos publicaciones</h2>
+
+    {% endif %}
+
+
+        
+   
+
+{% endblock %}
