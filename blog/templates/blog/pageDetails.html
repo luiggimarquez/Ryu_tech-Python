@@ -1,6 +1,27 @@
 {% extends "index.html" %}
 
+{% load static %}
+
 {% block content %}
-<p>hola</p>
+
+    {% for data in post %}
+        
+        <div>
+            <a href="{% url 'edit' data.id %}">Editar</a>
+            <a href="{% url 'delete' data.id %}">Eliminar</a>
+        </div>
+        <div class="postImg">
+            {% if data.imageMain %}
+                <img src="{{ data.imageMain.url }}" class="card-img-top img-fluid imgBlogDetail" alt="imagen de {{data.title}}">
+            {% else %}
+                <img src="{% static 'images/no-image.jpg' %}" class="card-img-top img-fluid imgBlogDetail" alt="imagen de {{data.title}}">
+            {% endif %}
+        </div>
+
+        <div><h2>{{data.title}}</h2></div>
+
+        <section class="section"> {{data.Message|safe}}</section>
+
+    {% endfor %}
 
 {% endblock %}

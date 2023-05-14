@@ -172,8 +172,34 @@ width: 50%;
 
 .card-text {
     min-height: 72px;
+    text-align: center;
 }
 
 .card-footer {
     text-align: center;
+}
+
+
+.postImg {
+    min-width: 720px;
+    min-height: 500px;
+    margin: 30px;
+}
+
+.section {
+    padding: 45px;
+    margin: 56px;
+    background: #000000b3;
+}
+
+.section p{
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: white;
+    text-align: justify;
+}
+
+.imgBlogDetail {
+    max-width: 720px;
+    max-height: 500px;
 }

@@ -13,3 +13,15 @@ class PostsForm(ModelForm):
     class Meta:
         model = Posts
         fields =['title','subtitle','Message','imageMain']
+
+class PostsEditForm(ModelForm):
+
+    title = forms.CharField(label= 'Título', required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
+    subtitle = forms.CharField(label= 'Descripción', required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
+    Message = RichTextFormField(label="Publicación", required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
+    imageMain = forms.ImageField(label = 'Imagen', required=True)
+    delete_image = forms.BooleanField(required=False, initial=False, label='Eliminar imagen existente')
+
+    class Meta:
+        model = Posts
+        fields =['title','subtitle','Message','imageMain', 'delete_image']
