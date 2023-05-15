@@ -203,3 +203,9 @@ width: 50%;
     max-width: 720px;
     max-height: 500px;
 }
+
+.alert-error{
+
+    color: red;
+    font-weight: bolder;
+}

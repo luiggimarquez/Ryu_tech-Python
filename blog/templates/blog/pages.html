@@ -5,6 +5,13 @@
 
     <h2 class="text-lg-start shadow-sm p-3 mt-5 bg-body-tertiary rounded">Lista de Publicaciones</h2>
 
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-{{ message.tags }}">{{ message}}</div>
+        {% endif %}
+    {% endfor %}
+        
+
     {% if pages %}
 
     <div class="container-fluid listBlogs">

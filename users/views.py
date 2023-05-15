@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .forms import UserRegisterForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
@@ -38,6 +38,7 @@ def signup(request):
                         info = form.cleaned_data
                         user = User.objects.create_user(username=str(info['username']).lower(), password=str(info['password1']), first_name=str(info['first_name']), last_name=str(info['last_name']), email=str(info['email']))
                         user.save()
+                        user.user_permissions.add(Permission.objects.get(codename='can_view'))
                         login(request, user)
                         return redirect('home')
                     else:
@@ -89,6 +90,13 @@ def profile(request):
 @login_required           
 def edituser(request):
     user = request.user
+
+    #borrar
+    if(user.has_perm('blog.can_view')):
+        print("entro a view")
+    else:
+        print('no entro')
+
     if (request.method == 'GET'):
             return render(request, "edituser.html",{
             'form': editUserForm(user=request.user)
@@ -96,7 +104,7 @@ def edituser(request):
     else:
         
         form = editUserForm(request.POST,user=request.user)
-    
+
         if form.is_valid():
             info = form.cleaned_data
             form.clean_email()
@@ -131,13 +139,3 @@ class editprofile(UpdateView):
         profile, created = Profile.objects.get_or_create(user = self.request.user)
         return profile
 
-
-    """
-     if(request.user.is_authenticated):
-        print(request.user.userprofile.username)
-        return render(request,"profile.html", {
-
-            'user_logged' : request.user
-        })
-    else:
-        return redirect("login") """

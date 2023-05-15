@@ -43,9 +43,10 @@ class editUserForm(UserCreationForm):
         helps_text = {k:"" for k in fields}
 
     def clean_email(self):
+        
         email = self.cleaned_data.get('email')
 
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exists() and (email != self.user.email): #Para poder lanza la excepcion, debe ser un mail que ya exista en el DB pero que no sea el mail actual del login
             raise forms.ValidationError("Este Email ya esta siendo usado")
         return email
 

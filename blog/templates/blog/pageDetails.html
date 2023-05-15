@@ -4,6 +4,12 @@
 
 {% block content %}
 
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-{{ message.tags }}">{{ message}}</div>
+        {% endif %}
+    {% endfor %}
+
     {% for data in post %}
         
         <div>

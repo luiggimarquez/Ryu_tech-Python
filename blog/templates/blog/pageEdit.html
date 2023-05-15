@@ -6,6 +6,12 @@
 
     
     <h2 class="text-lg-start shadow-sm p-3 mt-5 bg-body-tertiary rounded">Edición - Post</h2>
+
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-{{ message.tags }}">{{ message}}</div>
+        {% endif %}
+    {% endfor %}
         
     <form action="" method="POST" enctype="multipart/form-data" class="estudiantes">
         {% csrf_token %}
