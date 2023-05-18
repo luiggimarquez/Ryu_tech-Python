@@ -16,7 +16,7 @@ def createPage(request):
         messages.error(request, 'No tienes permisos para realizar esta operación')
         return redirect('pages')
 
-
+    
     if(request.method == "POST"):
         
         form = PostsForm(request.POST,request.FILES)
@@ -32,10 +32,16 @@ def createPage(request):
 
             return render(request, 'blog/newpage.html',{
             'form': PostsForm})
+        else:
+            return render(request, 'blog/newpage.html',{
+            'form': PostsForm, 'errors':form.errors})
+
    
     return render(request, 'blog/newpage.html',{
         'form': PostsForm
     })
+
+
 
 def pagesListView(request):
 

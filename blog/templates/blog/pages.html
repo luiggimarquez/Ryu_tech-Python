@@ -3,7 +3,17 @@
 
 {% block content %}
 
-    <h2 class="text-lg-start shadow-sm p-3 mt-5 bg-body-tertiary rounded">Lista de Publicaciones</h2>
+    <h2 class="text-lg-start shadow-sm p-3 mt-3 bg-body-tertiary rounded">Lista de Publicaciones</h2>
+    <div class="blogFuctionsContainer"> 
+        <div><input type="text" autocomplete="off" name="text" class="input" placeholder="Search"></div>
+        <div><a href="{% url 'createPage' %}">
+            <button class="buttonPost">
+                <span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"></path><path fill="currentColor" d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"></path></svg> Create Post
+                </span>
+          </button></a></div>
+    </div>
+    
 
     {% for message in messages %}
         {% if message.tags == 'error' %}

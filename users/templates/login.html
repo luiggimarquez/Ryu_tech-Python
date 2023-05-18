@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h3>Login</h3>
+    <h3 class="centerTitleLogin" >Login</h3>
 
     {% if errors %}
         <h4 class="errorData">{{errors}}</h4>
@@ -17,7 +17,7 @@
     <div>
         <h5>No tienes cuenta? Regístrate</h5>
         <div class="button1">
-            <a href="/signup"><button  class="btn41-43 btn-41">Sign Up</button></a>
+            <a href="{% url 'signup' %}"><button  class="btn41-43 btn-41">Sign Up</button></a>
         </div>
     </div>
 

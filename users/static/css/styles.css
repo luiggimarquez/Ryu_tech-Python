@@ -38,6 +38,26 @@ h3, h4{
     margin: 10px 0;
 }
 
+.navbar-nav {
+    flex-direction: row;
+    align-items: center;
+}
+.nav-link {
+    padding: 0;
+}
+.imgProfileAvatar {
+    width: 50%;
+    height: 20%;
+    max-height: 64px;
+    border-radius: 88px 90px;
+ 
+}
+
+.imgProfileAvatarBig {
+    width: auto;
+    max-height: 300px;
+    margin-bottom: 20px;
+}
 .form-control {
     display: flex;
     width: 100%;
@@ -47,6 +67,8 @@ h3, h4{
     background-color: #8080805c;
     margin: 20px 20px;
     padding: 5px 20px;
+    border-radius: 10px;
+    box-shadow: 1px 3px 6px gray;
 }
 
 .estudiantes div{
@@ -79,6 +101,14 @@ h3, h4{
     text-align: center;
     margin: 20px 0;
     font-size: larger;
+}
+
+.formProfile {
+    background-color: #8080805c;
+    margin: 20px 20px;
+    padding: 5px 20px;
+    border-radius: 12px 12px;
+    padding: 20px;
 }
 
 .button1{
@@ -134,7 +164,7 @@ h3, h4{
 
 .login{
 
-    margin-left: 10px;
+    margin-left: 0px;
 }
 
 footer, .text-reset{
@@ -221,6 +251,45 @@ width: 50%;
     border-radius: 88px 90px;
     padding: 5px;
 }
+.centerTitle {
+    text-align: center;
+}
+
+.centerTitle2 {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.centerTitleLogin {
+    
+    margin: 135px 0 36px 0;
+}
+
+.blogFuctionsContainer{
+
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.abc {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.mainContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 50px;
+}
 
 .userContainer {
     min-width: 350px;
@@ -228,7 +297,7 @@ width: 50%;
     background-color: gainsboro;
     margin-bottom: 20px;
     border-radius: 12px 12px;
-    box-shadow: 2px 1px 3px black;
+    box-shadow: 3px 3px 9px slategray;
 }
 
 .subcontainer3 {
@@ -248,7 +317,9 @@ width: 50%;
     background: #9E9E9E;
     padding: 10px;
     margin: 10px;
+    height: fit-content;
     border-radius: 8px 8px 8px;
+    min-width: 250px;
 }
 
 .messageContainerReceiver {
@@ -276,6 +347,7 @@ width: 50%;
     font-weight: 600;
     width: 100%;
     text-align: center;
+    height: fit-content;
 }
 
 .messageMessageChat {
@@ -289,6 +361,74 @@ width: 50%;
     display: grid;
     max-height: 650px;
     overflow-y: scroll;
+    min-height: 650px;
+    align-content: baseline;
+}
+
+.chatSend {
+    margin: 22px 0;
 }
 
 
+  .link {
+    text-decoration: none;
+    color: black;
+    font-size: smaller;
+}
+
+.button {
+    font-size: 17px;
+    padding: 4px;
+    border: transparent;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    background: #1e90ff80;
+    color: white;
+    border-radius: 4px;
+}
+   
+   button:hover {
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(30,144,255,1) 0%, rgba(0,212,255,1) 100%);
+   }
+   
+   button:active {
+    transform: translate(0em, 0.2em);
+   }
+
+   .input {
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    padding: 0.5em;
+    background-color: #ccc;
+    box-shadow: inset 2px 5px 10px rgba(0,0,0,0.3);
+    transition: 300ms ease-in-out;
+  }
+  
+  .input:focus {
+    background-color: white;
+    transform: scale(1.05);
+    box-shadow: 13px 13px 100px hsl(0, 3%, 28%),
+               -13px -13px 100px #ffffff;
+  }
+
+  .buttonPost {
+    border: 2px solid #24b4fb;
+    background-color: #24b4fb;
+    border-radius: 0.9em;
+    padding: 0.5em;
+    transition: all ease-in-out 0.2s;
+    font-size: 16px;
+   }
+   
+   .buttonPost span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: 600;
+   }
+   
+   .buttonPost:hover {
+    background-color: #0071e2;
+   }

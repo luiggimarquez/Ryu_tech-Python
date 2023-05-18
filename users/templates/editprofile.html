@@ -5,9 +5,12 @@
     
     
     <div>
-        <h5>Editar perfil de usuario</h5>
+        <h5 class="centerTitle2" >Editar perfil de usuario</h5>
+        <span class="centerTitle" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Si deseas modificar un campo debes sobreescribirlo. Si deseas borrar un campo, solo déjalo en blanco; El campo Link debe empezar por http:// o https://.para eliminar la imagen de perfil selecciona el checkbox 'Limpiar'">
+            <h6>Ayuda</h6>
+        </span>
 
-       <form action="/profile/edit/" method="POST" enctype="multipart/form-data">
+       <form action="/profile/edit/" method="POST" enctype="multipart/form-data" class="formProfile">
         {% csrf_token %}
         {{form.as_p}}
 

@@ -6,30 +6,41 @@
 
     <h2>Usuarios Ryu Tech - Chat</h2>
 
+    <div class="mainContainer">
     {% for data in usuarios %}
     
-       
-        <div class="containerProfiles">
-            <div class="userContainer">
-                <div class="subcontainer1">
-                    <div class="padding">{{data.user.username}}</div>
-                </div>
-                <div class="subcontainer2">
-                    <div class="padding">{{data.user.email}}</div>
-                    
-                </div>
-                <div class="subcontainer3">
-                    {% if data.avatar%}
-                        <img src="{{data.avatar.url}}" class="imgProfileChat">
-                    {% else %}
-                        <img src="{% static 'images/no-avatar.jpg' %}" class="imgProfileChat">
-                    {% endif %}
-                    <div class="padding"><a href="{% url 'chatroom-getmsgs' data.user_id %}">Enviar Mensaje</a></div>
+       {% if data.user.username != request.user.username%}
+            <div class="containerProfiles">
+                <div class="userContainer">
+                    <div class="subcontainer1">
+                        <div class="padding"><strong>{{data.user.username|capfirst}}</strong></div>
+                    </div>
+                    <div class="subcontainer2">
+                        <div class="padding">{{data.user.email}}</div>  
+                    </div>
+                    <div class="subcontainer3">
+
+                        {% if data.avatar%}
+                            <img src="{{data.avatar.url}}" class="imgProfileChat">
+                        {% else %}
+                            <img src="{% static 'images/no-avatar.jpg' %}" class="imgProfileChat">
+                        {% endif %}
+
+                        <div class="padding">
+
+                            <button class="button">
+                                <a href="{% url 'chatroom-getmsgs' data.user_id %}" class="link">Enviar Mensaje</a>
+                            </button>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %} 
         
 
     {% endfor %}
+
+    </div>
 
 {% endblock %}

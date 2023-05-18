@@ -40,6 +40,8 @@ def signup(request):
                         user.save()
                         user.user_permissions.add(Permission.objects.get(codename='can_view'))
                         login(request, user)
+                        profile= Profile.objects.create(user=user, bio='', avatar='', link ='')
+                        profile.save()
                         return redirect('home')
                     else:
                         print(form.errors)
@@ -90,12 +92,6 @@ def profile(request):
 @login_required           
 def edituser(request):
     user = request.user
-
-    #borrar
-    if(user.has_perm('blog.can_view')):
-        print("entro a view")
-    else:
-        print('no entro')
 
     if (request.method == 'GET'):
             return render(request, "edituser.html",{

@@ -35,21 +35,14 @@ def getMessages(request, id):
 
     message=[]
     for filterMessage in messages:
-        print(type(filterMessage.sender.username))
-        print(filterMessage.receiver)
-        print(filterMessage.message)
-        print("username: ",type(user.username))
-        print("receiver: ",receiver.username)
-        print("primera condicion", (filterMessage.sender.username == user.username) and (filterMessage.receiver.username == receiver.username))
+        
         if((filterMessage.sender.username == user.username) and (filterMessage.receiver.username == receiver.username)):
-            #message['sender']= filterMessage.message
             message.append({'message':filterMessage.message,'sender':filterMessage.sender.username})
-            print("datoS: ",message)
+    
         if((filterMessage.receiver.username == user.username) and (filterMessage.sender.username == receiver.username)):
-            #message['receiver']= filterMessage.message
+
             message.append({'message':filterMessage.message, 'receiver':filterMessage.sender.username})
-            print("datoR: : ",message)
-        print("sender/receiver: ", message)
+   
 
 
     

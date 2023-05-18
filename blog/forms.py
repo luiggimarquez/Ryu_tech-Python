@@ -7,7 +7,7 @@ class PostsForm(ModelForm):
 
     title = forms.CharField(label= 'Título', required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
     subtitle = forms.CharField(label= 'Descripción', required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
-    Message = RichTextFormField(label="Publicación", required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
+    Message = RichTextFormField()
     imageMain = forms.ImageField(label = 'Imagen', required=True, widget=forms.FileInput(attrs={'class':'form-control'}))
 
     class Meta:

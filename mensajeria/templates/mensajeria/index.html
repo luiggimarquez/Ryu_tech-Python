@@ -23,21 +23,37 @@
 				<li class="nav-item">
 					<a class="nav-link active" aria-current="page" href="/">Home</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'profile' %}">Perfil de usuario</a>
+                <li class="nav-item">
+					<a class="nav-link" href="{% url 'pages' %}">Blog</a>
 				</li>
+				
 				<li class="nav-item">
 					<a class="nav-link" href="/#about">About</a>
 				</li>
-				{% if request.user.is_authenticated %}
-					<li class="nav-item">
-						<a class="nav-link login" href="/logout">Logout</a>
-					</li>
-				{% else %}
-					<li class="nav-item login">
-						<a class="nav-link" href="/login">Login</a>
-					</li>
-				{% endif %}
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if request.user.profile.avatar %}
+                                <img src="{{request.user.profile.avatar.url}}" class="imgProfileAvatar" >
+                            {% else %}
+                                <img src="{% static 'images/no-avatar.jpg' %}" class="imgProfileAvatar">
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'profile' %}">Perfil de usuario</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'chatProfiles' %}">Mensajería</a>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link login" href="{% url 'logout' %}">Logout</a>
+                            </li>
+                            
+                        </ul>
+                    </li>
+                {% endif %}
+				
 			</ul>
           </div>
         </div>
@@ -63,10 +79,10 @@
         </a>
       
         <ul class="nav col-md-4 justify-content-center">
-          <li class="nav-item "><a href="/" class="nav-link px-2 text-reset">Home</a></li>
-          <li class="nav-item "><a href="{% url 'profile' %}" class="nav-link px-2 text-reset">Perfil de usuario</a></li>
-         
-          <li class="nav-item "><a href="/#about" class="nav-link px-2 text-reset">About</a></li>
+            <li class="nav-item "><a href="/" class="nav-link px-2 text-reset">Home</a></li>
+            <li class="nav-item "><a href="{% url 'pages' %}" class="nav-link px-2 text-reset">Blog</a></li>
+            <li class="nav-item "><a href="{% url 'chatProfiles' %}" class="nav-link px-2 text-reset">Mensajería</a></li>
+            <li class="nav-item "><a href="/#about" class="nav-link px-2 text-reset">About</a></li>
         </ul>
       </footer>
 

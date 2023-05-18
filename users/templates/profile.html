@@ -5,9 +5,9 @@
     <h4>Perfil de usuario</h4>
     <div>
         {% if request.user.profile.avatar %}
-        <p>{{ request.user.profile.avatar }}</p>
+            <img src="{{ request.user.profile.avatar.url }}" class="imgProfileAvatarBig">
         {% else %}
-        <img src={% static 'images/no-avatar.jpg' %}>
+            <img src={% static 'images/no-avatar.jpg' class="imgProfileAvatarBig" %}>
         {% endif %}
 
         <p>Usuario: {{request.user.username}}</p>
