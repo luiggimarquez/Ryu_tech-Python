@@ -22,6 +22,7 @@ def createPage(request):
             if(form.is_valid()):
 
                 info = form.cleaned_data
+                print(info)
                 usertable= User.objects.get(username=request.user.username)
                 image = request.FILES['imageMain']
             

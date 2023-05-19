@@ -10,7 +10,7 @@ class MessagesChat(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f" Chat Between ----> sender: {self.sender} and ----> Receiver: {self.receiver}"
+        return f" Chat Between ----> sender: {self.sender}  ----> Receiver: {self.receiver}"
     
 
  
