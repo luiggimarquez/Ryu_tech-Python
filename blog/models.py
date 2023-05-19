@@ -5,8 +5,8 @@ from ckeditor.fields import RichTextField
 class Posts(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length = 200)
-    subtitle = models.CharField(max_length = 200)
+    title = models.CharField(max_length = 100)
+    subtitle = models.CharField(max_length = 100)
     Message = RichTextField(blank=False, null=False, default='')
     imageMain = models.ImageField(upload_to='blogs',  null = True, blank = True)
     dateAdded = models.DateTimeField(auto_now_add = True)

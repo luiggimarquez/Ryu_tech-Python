@@ -9,6 +9,8 @@ from .models import Profile
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
 from .forms import editUserForm
+from django.utils.decorators import method_decorator
+from django.contrib import messages
 
 @login_required
 def base(request):
@@ -86,6 +88,7 @@ def log_in(request):
                 login(request, user)
                 return redirect('home')
 
+@login_required 
 def profile(request):
    return render(request, "profile.html")           
 
@@ -123,7 +126,7 @@ def edituser(request):
         })
          
              
-          
+@method_decorator(login_required, name='dispatch')     
 class editprofile(UpdateView):
    
     template_name = 'editprofile.html'
@@ -135,3 +138,14 @@ class editprofile(UpdateView):
         profile, created = Profile.objects.get_or_create(user = self.request.user)
         return profile
 
+
+def deleteuser(request, id):
+     
+    
+    if (request.user.has_perm('blog.can_delete')):
+        deleteUser = User.objects.get(id=id)
+        deleteUser.delete()
+    else:
+        messages.error(request, 'No tienes permisos para realizar esta operación')
+
+    return redirect('Profiles')

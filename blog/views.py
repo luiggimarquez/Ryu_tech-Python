@@ -5,9 +5,10 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.views.decorators.cache import never_cache
 from django.contrib import messages
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
-
+@login_required
 def createPage(request):
 
 
@@ -42,15 +43,18 @@ def createPage(request):
     })
 
 
-
+@login_required
 def pagesListView(request):
 
-    pagesList=Posts.objects.all()    
+    canDelete=False
+    pagesList=Posts.objects.all()
+    if (request.user.has_perm('blog.can_delete')):
+        canDelete=True   
     return render(request,'blog/pages.html',{
-        'pages': pagesList
+        'pages': pagesList, 'canDelete':canDelete
     })
 
-
+@login_required
 def pageDetailView(request,id):
 
     print(id)
@@ -63,7 +67,7 @@ def pageDetailView(request,id):
         'post' : post
     })
 
-
+@login_required
 def pageEdit(request,id):
 
     user=request.user
@@ -76,7 +80,7 @@ def pageEdit(request,id):
    
     if (request.method == 'GET'):
             return render(request, "blog/pageEdit.html",{
-            'form': PostsEditForm(instance=posts)
+            'form': PostsEditForm(instance=posts), 'id':id
             })
    
     else:
@@ -101,12 +105,11 @@ def pageEdit(request,id):
    
 
 
-   
     return render(request,'blog/pageEdit.html',{
-        'form': PostsEditForm(instance=posts)
+        'form': PostsEditForm(instance=posts), 'id':id
     })
 
-
+@login_required
 def deletePage(request,id):
 
     user = request.user
@@ -119,4 +122,31 @@ def deletePage(request,id):
         post.delete()
 
     return redirect('pages')
+
+@login_required
+def searchPost (request):
+
+    if(request.GET != {}):
+        
+        canDelete=False
+        if (request.user.has_perm('blog.can_delete')):
+            canDelete=True 
+
+        empty = False
+        consulta = Posts.objects.filter(
+            Q(user__last_name__icontains=request.GET['busqueda']) |
+            Q(title__icontains=request.GET['busqueda']) |
+            Q(subtitle__icontains=request.GET['busqueda']) |
+            Q(user__first_name__icontains=request.GET['busqueda']))
+
+        if(len(consulta) == 0):
+            empty = True
+
+        return render(request, 'blog/pagesSearch.html', {
+            'pages' : consulta, 'empty' : empty, 'canDelete':canDelete
+        })
+        
+    else:
+        print('entro a else')
+        return render(request,'blog/pagesSearch.html')
     

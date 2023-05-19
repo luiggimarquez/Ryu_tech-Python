@@ -4,8 +4,12 @@
 {% block content %}
 
     <h2 class="text-lg-start shadow-sm p-3 mt-3 bg-body-tertiary rounded">Lista de Publicaciones</h2>
-    <div class="blogFuctionsContainer"> 
-        <div><input type="text" autocomplete="off" name="text" class="input" placeholder="Search"></div>
+    <div class="blogFuctionsContainer">
+        <form action="/pages/search/" method="GET">
+            <div>
+                <input type="text" autocomplete="off" name="busqueda" class="input" placeholder="Search">
+            </div>
+        </form> 
         <div><a href="{% url 'createPage' %}">
             <button class="buttonPost">
                 <span>
@@ -42,10 +46,14 @@
                     <h5 class="card-title">{{ data.title }}</h5>
                     <p class="card-text">{{ data.subtitle }}</p>
                     <a href="{% url 'details' data.id %}" class="btn btn-primary">Leer más...</a>
-                    <div>
+                    
+                    {%  if canDelete %}
+                    <div class="cardEdit">
                         <a href="{% url 'edit' data.id %}">Editar</a>
                         <a href="{% url 'delete' data.id %}">Eliminar</a>
                     </div>
+                    {% endif %}
+
                     </div>
                 </div>
                 <div class="card-footer">

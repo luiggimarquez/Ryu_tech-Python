@@ -3,21 +3,24 @@ from django.contrib.auth.models import User
 from .models import ChatRoom, MessagesChat
 from users.models import Profile
 from django.contrib.auth.decorators import login_required 
-from django.http import HttpResponseRedirect, HttpResponse  
+from django.http import  HttpResponse  
 
-def usersChat(request):
+@login_required 
+def usersProfile(request):
 
+    canDelete=False
+    if (request.user.has_perm('blog.can_delete')):
+        canDelete=True 
     users= Profile.objects.all()
-    print(users)
-    return render(request, 'mensajeria/profilesMessages.html',{'usuarios':users})
+
+    return render(request, 'mensajeria/profilesMessages.html',{
+        'usuarios':users, 'canDelete':canDelete})
 
 
 @login_required 
 def getMessages(request, id):
     user = request.user
     receiver = User.objects.get(id=id)
-    
-    
     chat_rooms = ChatRoom.objects.filter(users__in=[user, receiver])
     
     if chat_rooms.exists():
@@ -25,13 +28,8 @@ def getMessages(request, id):
     else:
         chat_room = ChatRoom.objects.create()
         chat_room.users.add(user, receiver)
-    
-    
-    #messages = MessagesChat.objects.filter(chatroom=chat_room)
-    #messages = MessagesChat.objects.filter(sender=request.user, receiver=id)
-    messages = MessagesChat.objects.all()
 
-    print(messages)
+    messages = MessagesChat.objects.all()
 
     message=[]
     for filterMessage in messages:
@@ -40,18 +38,8 @@ def getMessages(request, id):
             message.append({'message':filterMessage.message,'sender':filterMessage.sender.username})
     
         if((filterMessage.receiver.username == user.username) and (filterMessage.sender.username == receiver.username)):
-
             message.append({'message':filterMessage.message, 'receiver':filterMessage.sender.username})
    
-
-
-    
-   
-
-    
-    #messages = MessagesChat.objects.filter(a=chat_room)
-    #messages = MessagesChat.objects.filter()
-    print(request.user.id)
     return render(request, 'mensajeria/chatRoom.html', {'messages': message, 'id': id, 'receiver':receiver})
 
  
@@ -64,15 +52,7 @@ def sendMessage(request):
         message = request.POST['message'] 
         receiver_id = request.POST['receiver']
 
-        try:
-            receiver = User.objects.get(id=receiver_id)
-        except User.DoesNotExist:
-            # Manejar el caso si el usuario receptor no existe
-            return HttpResponse("User does not exist.")
-
-    
-
-
+        receiver = User.objects.get(id=receiver_id)
         chat_room = ChatRoom.objects.filter(Q(users=user) & Q(users=receiver)).first()
 
         if not chat_room:

@@ -66,7 +66,7 @@ h3, h4{
 .estudiantes{
     background-color: #8080805c;
     margin: 20px 20px;
-    padding: 5px 20px;
+    padding: 25px 20px;
     border-radius: 10px;
     box-shadow: 1px 3px 6px gray;
 }
@@ -109,6 +109,24 @@ h3, h4{
     padding: 5px 20px;
     border-radius: 12px 12px;
     padding: 20px;
+}
+
+.editTitlePostDetails{
+
+    display: flex;
+    width: 90%;
+    justify-content: flex-end;
+}
+
+.titlePostDetail{
+
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.titlePostDetail h3{
+
+    text-align: center;
 }
 
 .button1{
@@ -185,15 +203,21 @@ width: 50%;
 
 .card{
     text-align-last: center;
-    height: 395px;
+    min-height: 426px;
+    max-height: 426px;
+    max-width: 350px;
+
 }
 
 .card-title {
     text-align: center;
-    min-height: 72px;
+    max-height: 92px;
+    min-height: 92px;
+    font-size: 19px;
 }
 
 .imgBlog {
+    min-height: 150px;
     max-height: 150px;
     max-width: 260px;
     margin-top: 5px;
@@ -201,11 +225,23 @@ width: 50%;
 }
 
 .card-text {
-    min-height: 72px;
+    max-height: 68px;
     text-align: center;
+    font-size: 15px;
+    min-height: 68px;
+}
+
+.cardEdit {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cardEdit a {
+    text-decoration: none;
 }
 
 .card-footer {
+    max-width: 350px;
     text-align: center;
 }
 
@@ -220,6 +256,7 @@ width: 50%;
     padding: 45px;
     margin: 56px;
     background: #000000b3;
+    max-width: 1200px;
 }
 
 .section p{
@@ -240,13 +277,34 @@ width: 50%;
     font-weight: bolder;
 }
 
+.postDetailAuthor {
+
+    display: flex;
+    width: 90%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 34px;
+    margin-top: 50px;
+}
+
+
+
 .containerProfiles {
     display: flex;
+    min-height: 152px;
+    max-height: 152px;
+    margin: 10px;
+}
+.containerProfiles2 {
+    display: flex;
+    margin: 10px;
 }
 
 .imgProfileChat {
-    width: 20%;
-    height: 20%;
+    width: 50px;
+    height: 50px;
     max-height: 64px;
     border-radius: 88px 90px;
     padding: 5px;
@@ -306,6 +364,10 @@ width: 50%;
     align-items: center;
 }
 
+.userPermission {
+    width: 145px;
+}
+
 .padding{
 
     padding: 5px;
@@ -359,9 +421,9 @@ width: 50%;
 
 .ChatContainer {
     display: grid;
-    max-height: 650px;
+    max-height: 618px;
     overflow-y: scroll;
-    min-height: 650px;
+    min-height: 495px;
     align-content: baseline;
 }
 
@@ -370,32 +432,43 @@ width: 50%;
 }
 
 
-  .link {
+.link {
     text-decoration: none;
     color: black;
     font-size: smaller;
 }
 
+.subcontainer1 {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
 .button {
+    position: relative;
+    top: 12px;
     font-size: 17px;
-    padding: 4px;
+    padding: 8px;
     border: transparent;
     box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
     background: #1e90ff80;
     color: white;
     border-radius: 4px;
 }
-   
-   button:hover {
+
+.button:hover {
+
     background: rgb(2,0,36);
     background: linear-gradient(90deg, rgba(30,144,255,1) 0%, rgba(0,212,255,1) 100%);
-   }
-   
-   button:active {
+}
+   .button:active {
     transform: translate(0em, 0.2em);
-   }
+}
 
-   .input {
+
+
+.input {
+
     border: none;
     outline: none;
     border-radius: 15px;
@@ -403,14 +476,15 @@ width: 50%;
     background-color: #ccc;
     box-shadow: inset 2px 5px 10px rgba(0,0,0,0.3);
     transition: 300ms ease-in-out;
-  }
+}
   
-  .input:focus {
+.input:focus {
+
     background-color: white;
     transform: scale(1.05);
     box-shadow: 13px 13px 100px hsl(0, 3%, 28%),
                -13px -13px 100px #ffffff;
-  }
+}
 
   .buttonPost {
     border: 2px solid #24b4fb;
@@ -432,3 +506,50 @@ width: 50%;
    .buttonPost:hover {
     background-color: #0071e2;
    }
+
+   .buttonPostEdit {
+    border: none;
+    color: #fff;
+    background-image: linear-gradient(30deg, #0400ff, #4ce3f7);
+    border-radius: 20px;
+    background-size: 100% auto;
+    font-family: inherit;
+    font-size: 17px;
+    padding: 0.1em 1.0em;
+    margin: 10px 10px 0 10px;
+   }
+   
+   .buttonPostEdit:hover {
+    background-position: right center;
+    background-size: 200% auto;
+    -webkit-animation: pulse 2s infinite;
+    animation: pulse512 1.5s infinite;
+   }
+   
+   @keyframes pulse512 {
+    0% {
+     box-shadow: 0 0 0 0 #05bada66;
+    }
+    }
+
+.buttonDeleteUser {
+    position: relative;
+    top: 12px;
+    right: 5px;
+    font-size: smaller;
+    padding: 4px;
+    border: transparent;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    background: #1e90ff80;
+    color: black;
+    border-radius: 4px;
+}
+.buttonDeleteUser:hover {
+    
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(30,144,255,1) 0%, rgba(0,212,255,1) 100%);
+}
+    .buttonDeleteUser:active {
+    transform: translate(0em, 0.2em);
+}
+
