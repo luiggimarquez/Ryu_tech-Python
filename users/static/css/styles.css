@@ -50,7 +50,6 @@ h3, h4{
     height: 20%;
     max-height: 64px;
     border-radius: 88px 90px;
- 
 }
 
 .imgProfileAvatarBig {
@@ -289,8 +288,6 @@ width: 50%;
     margin-top: 50px;
 }
 
-
-
 .containerProfiles {
     display: flex;
     min-height: 152px;
@@ -307,8 +304,24 @@ width: 50%;
     height: 50px;
     max-height: 64px;
     border-radius: 88px 90px;
+    margin-left: 5px;
+    box-shadow: 1px 1px 4px #000000ad;
+    transition: 0.4s;
+}
+.imgProfileChat:hover {
+    box-shadow: 0px 1px 7px 2px #666;
+    transform: translateY(-1px);
+}
+
+.padding2 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
     padding: 5px;
 }
+
 .centerTitle {
     text-align: center;
 }

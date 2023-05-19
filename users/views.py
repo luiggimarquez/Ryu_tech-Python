@@ -149,3 +149,9 @@ def deleteuser(request, id):
         messages.error(request, 'No tienes permisos para realizar esta operación')
 
     return redirect('Profiles')
+
+@login_required
+def profileIndividual(request, id):
+
+    profile = User.objects.get(id = id)
+    return render(request, 'profileIndividual.html',{ 'profile':profile} )

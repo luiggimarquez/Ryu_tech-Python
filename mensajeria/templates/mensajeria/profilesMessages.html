@@ -41,9 +41,13 @@
                     <div class="subcontainer3">
                         <div>
                             {% if data.profile.avatar %}
-                                <img src="{{data.profile.avatar.url}}" class="imgProfileChat">
+                                <a href="{% url 'profileIndividual' data.id %} ">
+                                    <img src="{{data.profile.avatar.url}}" class="imgProfileChat" title="Perfil de usuario">
+                                </a>
                             {% else %}
-                                <img src="{% static 'images/no-avatar.jpg' %}" class="imgProfileChat">
+                                <a href="{% url 'profileIndividual' data.id %} "></a>
+                                    <img src="{% static 'images/no-avatar.jpg' %}" class="imgProfileChat" title="Perfil de usuario">
+                                </a>
                             {% endif %}
                         </div>
                         {% if canDelete %}
