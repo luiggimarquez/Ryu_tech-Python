@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from .models import ChatRoom, MessagesChat
 from users.models import Profile
 from django.contrib.auth.decorators import login_required 
-from django.http import  HttpResponse  
+from django.http import  HttpResponse
+from django.contrib import messages
 
 @login_required 
 def usersProfile(request):
@@ -11,7 +12,18 @@ def usersProfile(request):
     canDelete=False
     if (request.user.has_perm('blog.can_delete')):
         canDelete=True 
-    users= Profile.objects.all()
+    users= User.objects.all()
+
+    if(request.method == "POST"):
+        id=request.POST['id']
+        access=request.POST['permiso']
+
+        user = User.objects.get(id=id)
+        user.user_permissions.clear()
+        user.user_permissions.add(Permission.objects.get(codename=access))
+        user.save()
+        messages.success(request, f"Permiso '{access}' asignado con éxito")
+
 
     return render(request, 'mensajeria/profilesMessages.html',{
         'usuarios':users, 'canDelete':canDelete})
