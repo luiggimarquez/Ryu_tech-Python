@@ -138,7 +138,7 @@ class editprofile(UpdateView):
         profile, created = Profile.objects.get_or_create(user = self.request.user)
         return profile
 
-
+@login_required
 def deleteuser(request, id):
      
     
@@ -155,3 +155,7 @@ def profileIndividual(request, id):
 
     profile = User.objects.get(id = id)
     return render(request, 'profileIndividual.html',{ 'profile':profile} )
+
+@login_required
+def about(request):
+    return render(request,'about.html')

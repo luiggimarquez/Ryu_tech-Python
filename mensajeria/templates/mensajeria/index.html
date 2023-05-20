@@ -28,7 +28,7 @@
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link" href="/#about">About</a>
+					<a class="nav-link" href="{% url 'about' %}">About</a>
 				</li>
                 {% if request.user.is_authenticated %}
                     <li class="nav-item dropdown">
@@ -51,6 +51,9 @@
                             </li>
                             
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <span class="text-white">Hola {{ request.user.username|capfirst }}</span>
                     </li>
                 {% endif %}
 				
@@ -82,7 +85,7 @@
             <li class="nav-item "><a href="/" class="nav-link px-2 text-reset">Home</a></li>
             <li class="nav-item "><a href="{% url 'pages' %}" class="nav-link px-2 text-reset">Blog</a></li>
             <li class="nav-item "><a href="{% url 'Profiles' %}" class="nav-link px-2 text-reset">Mensajería</a></li>
-            <li class="nav-item "><a href="/#about" class="nav-link px-2 text-reset">About</a></li>
+            <li class="nav-item "><a href="{% url 'about' %}" class="nav-link px-2 text-reset">About</a></li>
         </ul>
       </footer>
 

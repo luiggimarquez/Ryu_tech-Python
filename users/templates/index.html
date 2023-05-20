@@ -28,7 +28,7 @@
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link" href="/#about">About</a>
+					<a class="nav-link" href="{% url 'about' %}">About</a>
 				</li>
                 {% if request.user.is_authenticated %}
                     <li class="nav-item dropdown">
@@ -77,8 +77,10 @@
 
         <section id="about">
 			<div class="about">
-				<p>Esta página es una preentrega del curso de Python de CoderHouse, en esta podemos registrar cursadas, estudiantes y profesores</p>
-				<p>También realiza una busqueda de los datos de la cursada</p>
+				<p>Esta página es el proyecto final del curso de Python de CoderHouse, Es un playground donde podemos registrarnos, hacer login, completar un perfil de usuario</p>
+				<p>Realiza posteos en forma de blog, donde se pueden editar y/o eliminar</p>
+				<p>También realiza una busqueda de post por títulos o por autor</p>
+        <p>Posee un sistema sencillo de mensajería y podemos ver los perfiles de los usuarios</p>
 				<p>Ha sido realizada con Django</p>
 			</div>
         </section>
@@ -99,7 +101,7 @@
             <li class="nav-item "><a href="/" class="nav-link px-2 text-reset">Home</a></li>
             <li class="nav-item "><a href="{% url 'pages' %}" class="nav-link px-2 text-reset">Blog</a></li>
             <li class="nav-item "><a href="{% url 'Profiles' %}" class="nav-link px-2 text-reset">Mensajería</a></li>
-            <li class="nav-item "><a href="/#about" class="nav-link px-2 text-reset">About</a></li>
+            <li class="nav-item "><a href="{% url 'about' %}" class="nav-link px-2 text-reset">About</a></li>
         </ul>
       </footer>
 

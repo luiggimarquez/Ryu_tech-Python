@@ -565,3 +565,78 @@ width: 50%;
     transform: translate(0em, 0.2em);
 }
 
+.backgroundAbout{
+
+    opacity: 15%;
+    z-index: -10;
+    position: absolute;
+    width: 100%;
+    
+}
+
+.titleAbout {
+    margin-top: 10px;
+}
+
+.AboutContainer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-content: center;
+}
+
+.subcontainer{
+    display: flex;
+    padding: 10px;
+    margin: 16px;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    width: 33%;
+    text-align: center;
+    box-shadow: 0px -1px 10px 1px darkgray;
+}
+
+.titleFinal {
+    display: flex;
+    text-align: center;
+    align-self: center;
+}
+.titleFinal p {
+    display: flex;
+    text-align: center;
+    align-self: center;
+    font-size: xxx-large;
+    position: relative;
+    top: 46px;
+    letter-spacing: 12px
+}
+
+.profileDataContainer{
+    display: flex;
+    flex-direction: column;
+    width: auto;
+}
+
+.imagenProfileCenter{
+    display: flex;
+    justify-content: center;
+}
+
+.nameProfile {
+    
+    background-color: #0a0a0aad;
+    color: white;
+    border-radius: 4px;
+    padding: 4px;
+    box-shadow: -1px -1px 1px 0px black;
+    margin-right: 7px;
+}
+
+.dataProfileContainer {
+    box-shadow: 0px 0px 3px 0px black;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}

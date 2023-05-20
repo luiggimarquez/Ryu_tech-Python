@@ -29,8 +29,7 @@ def createPage(request):
                 blog = Posts.objects.create(user=usertable, title = info['title'], subtitle=info['subtitle'], imageMain = image, Message = info['Message'])
                 blog.save()
 
-                return render(request, 'blog/newpage.html',{
-                'form': PostsForm})
+                return redirect('pages')
             else:
                 return render(request, 'blog/newpage.html',{
                 'form': PostsForm, 'errors':form.errors})

@@ -12,10 +12,3 @@ class MessagesChat(models.Model):
     def __str__(self):
         return f" Chat Between ----> sender: {self.sender}  ----> Receiver: {self.receiver}"
     
-
- 
-
-class ChatRoom(models.Model): 
-
-    users = models.ManyToManyField(User)
-    messages = models.ManyToManyField(MessagesChat)
