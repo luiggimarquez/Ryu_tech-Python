@@ -92,9 +92,9 @@ Ya podemos acceder en el navegador con el localhost o http://127.0.0.1:8000/ . E
 ## Resumen del proyecto 📜
 #
 
-Este Proyecto backend está estructurado en la  arquitectura MVT (Model-View-Template)
+Este Proyecto backend está estructurado en la arquitectura MVT (Model-View-Template)
 
-Posee tres aplicacion estructuras en la función especifica que cumplen en el proyecto: *users* donde se desarrolla todo lo relativo a registros, login, perfiles, accesos; **blog** donde se desarrolla el código que crea, edita y elimina los post del blog, asi como la busqueda por titulo o por nombre de perfil de usuario; y **mensajeria** que trabaja con el pequeño y simple chat para que los usuarios se comuniquen entre los perfiles de usuario.
+Posee tres aplicaciones estructuradas en la función específica que cumplen en el proyecto: *users* donde se desarrolla todo lo relativo a registros, login, perfiles, accesos; **blog** donde se desarrolla el código que crea, edita y elimina los post del blog, asi como la busqueda por título o por nombre de perfil de usuario; y **mensajeria** que trabaja con el pequeño y simple chat para que los usuarios se comuniquen entre los perfiles de usuario.
 
 >URLS
 
@@ -127,15 +127,15 @@ Nuestras rutas principales están contenidas en **blog.urls.py** y son las sigui
 * `details/<id>` nos muestra el contenido completo de una publicación, a detalle.
 * `details/<id>/edit` permite editar una publicación.
 * `delete/<id>` Borra una publicación del blog.
-* `search/` nos permite buscar publicaciones palabras contenidas en titulo, subtitulo, nombre o apellido del usuario que la redactó.
+* `search/` nos permite buscar publicaciones con palabras contenidas en el título, subtítulo, nombre o apellido del usuario que la redactó.
 
 Nuestras rutas principales están contenidas en **mensajeria.urls.py** y son las siguientes:
 
 * `/` nos dirige al listado de perfiles de usuario.
-* `chatRoom/profile/<id>/` nos dirige a la página de creacion un mensaje para el chat (sender).
+* `chatRoom/profile/<id>/` nos dirige a la página de creación un mensaje para el chat (sender).
 * `chatRoom/receive` nos muestra el contenido de los mensajes recibidos en un chat (receiver).
 
-adicional está la ruta de administración que se provee por default por Django:
+Adicional está la ruta de administración que se provee por default por Django:
 
 * `admin/` permite entrar al ambiente de administración.
 
@@ -162,9 +162,9 @@ Trabaja de la siguiente forma: se valida que método se está recibiendo, GET o 
 
 *`edituser`: valida primero el método con el que ingresamos a la página, si es **GET** nos muestra la vista generada por el **editUserForm** (form generado a partir de **UserCreationForm** de Django) para editar email, password, nombre y apellido. Para este proyecto se consideró que el username debe ser único y no se debe cambiar. Para borrar los campos restantes, menos el password por motivos de seguridad, se deja el campo en blanco.
 
-*`editProfile`: está basada en clase (CBV) por lo que para validar el login obligatorio usa `@method_decorator`. usando el **UpdateView** de **django.views.generic.edit** nos genera un formulario en nuestra plantilla **editprofile** para actualizar/crear avatar, bio y link y nos redirige a el mismo una vez actualizado 
+*`editProfile`: está basada en clase (CBV) por lo que para validar el login obligatorio usa `@method_decorator`. Usando el **UpdateView** de **django.views.generic.edit** nos genera un formulario en nuestra plantilla **editprofile** para actualizar/crear avatar, bio y link y nos redirige a el mismo una vez actualizado 
 
-*`deleteuser`: operación solo permitida a administradores, es una función que solo le sale en el frontend a usuario con el permiso **blog.can_delete**, aunque igualmente se valida en el backend con `request.user.has_perm('blog.can_delete')`; borrar el usuario filtrando por su id, usando `delete()`
+*`deleteuser`: operación solo permitida a administradores, es una función que solo le sale en el frontend a usuario con el permiso **blog.can_delete**, aunque igualmente se valida en el backend con `request.user.has_perm('blog.can_delete')`; borra al usuario filtrando por su id, usando `delete()`
 
 *`profileIndividual`: filtra a un usuario por su **id** para que un usuario pueda ver los datos de otros usuarios registrados.
 
@@ -172,13 +172,13 @@ Trabaja de la siguiente forma: se valida que método se está recibiendo, GET o 
 
 **views.py** en **blog**
 
-*`createPage`: aquí primero se valida si el usuario puede crear un **post** con `request.user.has_perm`: solo usuarios con permisos de edición y borrado puede crear publicaciones, asi que si no lo tiene, se rendirige a la plantilla **pages.html** con un mensaje de error, con `messages` de `django.contrib`, colocando la categoría  **error** y un mensaje personalizado. Si el usuario tiene permiso de crear, renderiza **newpage.html**, que nos muestra el formulario para crear elpost; luego se recibe del formulario la info que viene en el método POST y la chequea con `form.is_valid()`; si se genera un error, renderiza de nuevo la plantilla **newpage.html** con un mensaje de error, referente a  los datos ingresados; si todo esta bien, redirige a **pages.html**
+*`createPage`: aquí primero se valida si el usuario puede crear un **post** con `request.user.has_perm`: solo usuarios con permisos de edición y borrado puede crear publicaciones, así que si no lo tiene, se rendirige a la plantilla **pages.html** con un mensaje de error, con `messages` de `django.contrib`, colocando la categoría  **error** y un mensaje personalizado. Si el usuario tiene permiso de crear, renderiza **newpage.html**, que nos muestra el formulario para crear el post; luego se recibe del formulario la info que viene en el método POST y la chequea con `form.is_valid()`; si se genera un error, renderiza de nuevo la plantilla **newpage.html** con un mensaje de error, referente a  los datos ingresados; si todo esta bien, redirige a **pages.html**
 
 *`pagesListView`: Nos renderiza la página principal de las publicaciones del blog, que tiene todas las listas de publicaciones, si existieran, o un mensaje indicando que no hay ninguna. En esta funcion validamos un flag llamado "canDelete" y pregunta si el usuario tiene permiso "can_delete" y de tenerlo pone la variable en True y muestra dos opciones adicionales en la lista de publicaciones para editar y borrar directamente sobre la publicación; si un usuario es de permiso "can_edit" o "can_view" no muestra estos dos botones.
 
 *`pageDetailView`: recibiendo el **id** de la publicación de "leer mas", nos muestra una página **pageDetails.html** con todo el detalle de la publicación: título, subtítulo, imagen y cuerpo de la publicación. En esta página salen por defecto los botones de  **editar** y **borrar** la publicación para todos los usuarios, pero solo solo accesibles por chequeo de permisos, que son hechos en otras funciones.
 
-*`pageEdit`: primera validación de esta función es la de permisos, solo pueden editar "can_edit" y "can_delete", si la persona no tiene permisos, la regresa a "pageDetails.html" con su mensaje de error **No tienes permisos para realizar esta operación**. Si 
+*`pageEdit`: la primera validación de esta función es la de permisos, solo pueden editar "can_edit" y "can_delete", si la persona no tiene permisos, la regresa a "pageDetails.html" con su mensaje de error **No tienes permisos para realizar esta operación**. Si 
 el usuario puede acceder, cargara en el metodo GET el sitio renderizando el **PostEditForm** con los datos almacenados en el database; mediante el método Post se envían las modificaciones, pero el cambio de imagen solo la puede hacer el administrador, es decir, usuarios con permisos "can_delete", si no tiene permiso y se intenta cambiar la imagen del post renderizará la página con un mensaje de error
 
 *`deletePage`: verifica si el usuario tiene el permiso "can_delete", busca por **id** en el database y borra el post con **delete()**. Borrado el post redirige a **pages.html**. Si no tiene permiso, redirecciona a **pageDetails.html** con el mensaje de error. La función esta disponible en **pageDetails.html** y en los **cards** de **pages.html** solo para administradores.
@@ -555,7 +555,7 @@ finalmente la página About, trata de informacion del desarrollador de la págin
 
 * En root, en el folder **test** se encuentra un PDF con un pequeño informe con los resultados de las pruebas realizadas y quedan 3 txt con los reportes generados en las pruebas.
 
-* El video con el funcionamiento del website puede verse en:
+* El video con el funcionamiento del website puede verse en: https://www.youtube.com/watch?v=VEREVl5Uuu4
 
 ## Autor✒️
 
