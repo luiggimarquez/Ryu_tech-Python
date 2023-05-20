@@ -47,9 +47,7 @@ def getMessages(request, id):
 
 @login_required 
 def sendMessage(request):
-    from django.db.models import Q
-    user = request.user
-
+   
     if (request.method == 'POST'):
         message = request.POST['message'] 
         receiver_id = request.POST['receiver']
