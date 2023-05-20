@@ -1,6 +1,6 @@
 # Ryu Technology
 
-Este site desarrllado para este proyecto playground es una  aplicación para redactar publicaciones estilo Blog sobre tecnología, ciencia, anime y cultura y comunicarse por un sistema sencillo de chat entre los miembros del sitio; incluye un sistema de búsqueda para las publicaciones. Se busca aplicar tareas sencillas de CRUD: registrar, borrar y editar los usuarios, crear, editar y borrar publicaciones y realizar busquedas en la base de datos
+Este site desarrollado para este proyecto playground es una  aplicación para redactar publicaciones estilo Blog sobre tecnología, ciencia, anime y cultura y comunicarse por un sistema sencillo de chat entre los miembros del sitio; incluye un sistema de búsqueda para las publicaciones. Se busca aplicar tareas sencillas de CRUD: registrar, borrar y editar los usuarios, crear, editar y borrar publicaciones y realizar busquedas en la base de datos
 
 ![web principal](./media/readme/imgreadme1.jpg)
 
@@ -43,7 +43,7 @@ Estas instrucciones están hechas para **Visual Studio Code**, con el cual lo re
 
 Esto nos ubica en la carpeta creada para el proyecto en el terminal
 
-* Escribir del comando `git clone`, pegar el URL del repositorio después  y presionar enter, esto nos crea una carpeta del proyecto llamada **Ryu-Tech-Python**. En el terminal escribimos `cd Ryu-Tech-Python` para entrar en el root del proyecto.
+* Escribir del comando `git clone`, pegar el URL del repositorio después  y presionar enter, esto nos crea una carpeta del proyecto llamada **Ryu-Tech-Python**. En el terminal escribimos `cd Ryu-Tech-Python` para entrar en el root del proyecto. Cambiar al branch `proyecto_final` con `git checkout proyecto_final`
 
 * Crear un entorno virtual entrando en la consola/terminal: `py -m venv venv` en Windows; para Mac escribir `python3 -m venv venv`
 
@@ -183,154 +183,379 @@ el usuario puede acceder, cargara en el metodo GET el sitio renderizando el **Po
 
 *`deletePage`: verifica si el usuario tiene el permiso "can_delete", busca por **id** en el database y borra el post con **delete()**. Borrado el post redirige a **pages.html**. Si no tiene permiso, redirecciona a **pageDetails.html** con el mensaje de error. La función esta disponible en **pageDetails.html** y en los **cards** de **pages.html** solo para administradores.
 
+*`search`: hace una solicitud tipo GET para buscar en el servidor las publicaciones. Se realiza con el metodo **filter()** y con **Q objects** para buscar palabras contenidas en los títulos, subtítulos, nombre o apellido; si no hay resultados muestra el aviso de que la busqueda no trajo resultados y muestra una animación.
+
+
+**views.py** en **mensajeria**
+
+*`usersProfile`: esta función muestra todos los usuarios registrados en el sitio, en forma de cards; todas las cards tienen habilitado un boton para enviar un mensaje a ese usuario. Si el usuario ya creo su perfil, si hacen click en la foto pueden ir a ver su perfil de usuario. En esta función, que renderiza la plantilla **profilesMessages.html** si el usuario es administrador, en las cards aparecen funciones para cambiar los permisos de los usuarios y tambien poder eliminarlos (funcion **deleteuser** en la app **users**)
+
+*`getMessages`: renderiza el chatroom, el template **chatRoom.html** llamando a todos los mensajes guardados `MessagesChat.objects.all()`, luego filtrando los mensajes por si existen entre dos usuarios, como sender y receiver y enviándolos al frontend.
+
+*`sendMessage`: recibe los mensajes provenientes del **chatRoom.html** guardandolos en la base de datos y regresándonos al chatRoom
+
+
+
+
+
 
 
 >Models
 
-Se utilizaron 3 modelos para almacenar en la base de datos, tienen el siguiente formato:
+Se utilizaron los siguientes modelos para almacenar en la base de datos, tienen el siguiente formato, por app:
 
-Cursos: 
+**App users:**
 
-```
-class Curso (models.Model):
-   
-    curso = models.CharField(max_length=100)
-    numero_cursada = models.IntegerField(unique=True)
-    docente = models.ForeignKey(Profesores, null=True, blank=True, on_delete=models.CASCADE)
-    alumnos = models.ManyToManyField(Estudiantes, blank=True)
+* **Profile**: para crear el perfil del usuario, adicional al modelo User interno de Django
 
 ```
-Estudiantes
-```
-class Estudiantes (models.Model):
-    name = models.CharField(max_length=100)
-    lastname = models.CharField(max_length=100)
-    dni = models.IntegerField(unique=True)
-    edad = models.IntegerField() 
-    email = models.EmailField(max_length=100, unique=True)
+class Profile(models.Model):
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='profiles', null = True, blank = True)
+    bio = models.TextField(null = True, blank = True)
+    link = models.URLField(max_length = 200, null = True, blank = True)
+ 
 
 ```
 
-Profesores
+**App blog:**
+
+* **Posts**: para crear las publicaciones del blog
 
 ```
-class Profesores (models.Model):
-    name = models.CharField(max_length=100)
-    lastname = models.CharField(max_length=100)
-    dni = models.IntegerField(unique=True)
-    email= models.EmailField(max_length=100, unique=True)
-    profesion = models.CharField(max_length=100)
+class Posts(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length = 100)
+    subtitle = models.CharField(max_length = 100)
+    Message = RichTextField(blank=False, null=False, default='')
+    imageMain = models.ImageField(upload_to='blogs',  null = True, blank = True)
+    dateAdded = models.DateTimeField(auto_now_add = True)
+    dateModified = models.DateTimeField(auto_now=True,)
+
+```
+Aquí en este modelo se crearon los permisos para los usuarios, porque justamente afectan sobre la publicación en el blog, pero se pueden usar en cualquier modelo:
+
+        ```
+        class Meta:
+                verbose_name_plural ='Posts'
+                ordering = ['-dateModified']
+                permissions = (
+                    ("can_view", "Can view Posts"),
+                    ("can_edit", "Can edit Posts"),
+                    ("can_delete", "Can delete Posts"),
+                )
+
+        ```
+Así que  para covenciones en el proyecto, tenemos tres permisos: `lectura - blog.can_view`, `escritura - blog.can_edit` y `borrado - blog.can_delete`, siendo el permiso de borrado el permiso de **"administradores"**, pero no lo hace superusuario. Superusuario preferí que quede para asignarse en la consola de administración. 
+
+
+**App mensajeria:**
+
+* **MessagesChat:** para almacenar los datos del chat entre usuarios
+
+```
+class MessagesChat(models.Model): 
+
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent', default=None) 
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received') 
+    message = models.TextField(blank=False, null=False) 
+    date = models.DateTimeField(auto_now_add=True)
 
 ```
 
-Aquí se definieron DNI, Mails y número de cursada como atributo **unique** para que no se permita en la DB otro dato igual (ningún alumno puede tener el mismo DNI, ningún profesor puede tener el mismo DNI, las cursadas tiene un número único)
 
 >forms
 
-Para los formularios se usó una clase de Django llamada ModelForm de **django.form** para cargar los formularios que se usaron en los HTML con los datos que existen en cada modelo en **models.py**, por eso en las funciones de los views.py se añaden a los renderizados de los HTML las clases de estos forms generados aquí. Se hacen a partir de los modelos:
+****App users:**
 
-EstudiantesForm
+
+Para los formularios se usó una clase de Django llamada ModelForm de **UserCreationForm** para cargar los formularios que se usaron en los HTML con los datos que existen en cada modelo en **models.py**, por eso en las funciones de los views.py se añaden a los renderizados de los HTML las clases de estos forms generados aquí. Se hacen a partir de los modelos:
+
+**UserRegisterForm**
+
+Formulario usado para el registro de los datos de los usuarios:
 
 ```
-class EstudiantesForm(ModelForm):
+class UserRegisterForm(UserCreationForm):
+
+    username = forms.CharField(label="Usuario", max_length=20,required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
+    email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
+    password1 = forms.CharField(label="Contraseña", widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    password2 = forms.CharField(label="Repetir contraseña", widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    last_name = forms.CharField(label="Apellido", max_length=20,required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
+    first_name = forms.CharField(label="Nombre", max_length=20, required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
+
     class Meta:
-        model = Estudiantes
-        fields =['name','lastname', 'dni', 'edad', 'email']
+
+        model = User
+        fields = ['username', 'email','first_name','last_name','password1','password2']
+        help_texts = {k:"" for k in fields}
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Este Email ya esta siendo usado")
+        return email
 
 ```
-ProfesoresForm
+
+En este form se inicializaron los variables con labels y atributos para el CSS, asi como las reglas que sean requeridos o no y se eliminaron las ayudas que salian en los formularios propios de django
+
+**editUserForm:**
+
+Formulario usado para la edición de los datos de los usuarios:
+
+```
+class editUserForm(UserCreationForm):
+
+
+    email = forms.EmailField(label = "Modificar Email", required = False,)
+    password1 = forms.CharField(label = "Contraseña", widget = forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Introduce nuevo Password'}), required = False)
+    password2 = forms.CharField(label = "Repite Contraseña", widget = forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Repite nuevo Password'}), required = False)
+    first_name = forms.CharField(label = "Nombre", required = False)
+    last_name = forms.CharField(label = "Apellido", required = False) 
+
+    class Meta():
+        model = User
+        fields = ['email','password1','password2','first_name','last_name']
+
+        helps_text = {k:"" for k in fields}
 
 ```
 
-class ProfesoresForm(ModelForm):
+**App blog:**
+
+**PostsForm:** 
+
+Posee la personalizacion de los inputs de los formularios para crear posts
+
+```
+class PostsForm(ModelForm):
+
+    title = forms.CharField(label= 'Título', required=True, widget=forms.TextInput(attrs={'class':'form-control'}), max_length=100)
+    subtitle = forms.CharField(label= 'Descripción', required=True, widget=forms.TextInput(attrs={'class':'form-control'}),max_length=100)
+    Message = RichTextFormField()
+    imageMain = forms.ImageField(label = 'Imagen', required=True, widget=forms.FileInput(attrs={'class':'form-control'}))
+
     class Meta:
-        model = Profesores
-        fields = ['name','lastname', 'dni','email','profesion' ]
+        model = Posts
+        fields =['title','subtitle','Message','imageMain']
+
 
 ```
 
-CursosForm
+**PostsEditForm**
+
+Usado para las inicializaciones de los inputs para modificar los posts
+
 
 ```
-class CursosForm(ModelForm):
-    alumnos = forms.ModelMultipleChoiceField(
-                        queryset=Estudiantes.objects.all().order_by('name'),
-                        widget=forms.CheckboxSelectMultiple,required=False)
+class PostsEditForm(ModelForm):
+
+    title = forms.CharField(label= 'Título', required=True, widget=forms.TextInput(attrs={'class':'form-control'}),max_length=100)
+    subtitle = forms.CharField(label= 'Descripción', required=True, widget=forms.TextInput(attrs={'class':'form-control'}),max_length=100)
+    Message = RichTextFormField(label="Publicación", required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
+    imageMain = forms.ImageField(label = 'Imagen', required=True)
+    delete_image = forms.BooleanField(required=False, initial=False, label='Eliminar imagen existente')
+
     class Meta:
-        model = Curso
-        fields = ['curso','numero_cursada', 'docente','alumnos']
+        model = Posts
+        fields =['title','subtitle','Message','imageMain', 'delete_image']
 
 ```
+
+
+
 
 ## Funcionamiento 📜
 #
 
-Hay dos usuarios **superadmin**:
+Hay un usuario **superuser**:
 
 ```
-* usuario: luiggi_marquez
-* password: Luiggi123
-
 * usuario: admin
-* password: Admin123
-
+* password: Ryu.12345
 ```
-Con esto podemos entrar al panel de administración si hace falta. También podemos iniciar sesión para la aplicación web; se pueden registrar nuevos usuarios, pero estos no tienen acceso al panel de administración.
+Para pruebas:
 
-![web1](./App_1/static/images/loginreadme1.jpg)
+Usuario con permiso **administrador**:
+```
+* usuario: luiggi
+* password: Ryu.12345
+```
+
+Usuario con permiso **edicion**
+```
+* usuario: naruto
+* password: Ryu.12345
+```
+
+Usuario con permiso **lectura**
+```
+
+* usuario: chinchilla
+* password: Ryu.12345
+```
+
+
+Con esto podemos probar las diferentes funcionalidades del sitio si hace falta. Se pueden registrar nuevos usuarios, estos no tienen acceso al panel de administración y se crean con el permiso **lectura - blog.can_view**
+
+**Login**
+
+![web1](./media/readme/loginreadme1.jpg)
 
 Podemos iniciar sesión con estos usuarios o crear uno nuevo en **signup**. Todos los vínculos están protegidos y al no tener usuario logueado redireccionan al login.html (excepto singup.html y el panel de administración)
 
-**home** solo contiene un Hero, una sección about y los vínculos para navegar en el sitio
 
-![web2](./App_1/static/images/homereadme1.jpg)
+![web1-1](./media/readme/loginreadme2.jpg)
 
-el navbar contiene al final el link para hacer **logout**
 
-![web3](./App_1/static/images/navbarreadme1.jpg)
+**home:**
 
-**Estudiantes**
+ Solo contiene un Hero, una sección que habla sobre la página y los vínculos para navegar en el sitio
 
-Aquí podemos agregar estudiantes en el formulario:
+![web2](./media/readme/homereadme1.jpg)
 
-![web4](./App_1/static/images/estudiantesreadme1.jpg)
+el navbar contiene el link para hacer **logout**,ir al **perfil de usuario** y al chat en **mensajeria**, además del saludo al usuario logueado.
 
-**Profesores**
+![web3](./media/readme/homereadme2.jpg)
 
-Aquí agregamos profesores con el formulario:
+el footer tiene acceso a mensajeria, blog, home y about
 
-![web5](./App_1/static/images/profesoresreadme1.jpg)
+![web4](./media/readme/homereadme3.jpg)
 
-**Cursos**
+**Perfil de usuario:**
 
-Aquí agregaremos las cursadas:
+Contiene los datos de usuario cargados en el registro y los botones para editar los datos de usuario y los datos adicionales del perfil(profile: avatar, link, bio)
+![web4](./media/readme/userreadme1.jpg)
 
-![web6](./App_1/static/images/cursadasreadme1.jpg)
 
-**Busquedas**
+**Editar usuario**
 
-Las busquedas se realizan por el número de las cursadas:
+Contiene el formulario para cambiar email, password, nombre y apellido
+![web5](./media/readme/userreadme2.jpg)
 
-![web7](./App_1/static/images/busquedasreadme1.jpg)
+**Editar Perfil**
 
-Al encontrar una se despliega debajo un card con los resultados
+Contiene el formulario para cambiar/eliminar el avatar, los datos de biografía y un vinculo.
+![web6](./media/readme/userreadme3.jpg)
 
-![web8](./App_1/static/images/busquedasreadme2.jpg)
 
-Estan registradas cursadas 1, 2 y 3
 
+**blog**
+
+En esta parte tenemos el listados de publicaciones del sitio, el blog:
+
+Si no hay publicaciones, sale un aviso y una animación:
+
+![web6](./media/readme/blogreadme1.jpg)
+
+Si ya hay publicaciones cargades, nos sale asi:
+
+![web7](./media/readme/blogreadme2.jpg)
+
+La parte superior posee a la izquierda el input de busqueda y a la derecha el boton para crear nuevo post:
+
+![web8](./media/readme/blogreadme3.jpg)
+
+Si hacemos una busqueda y no existe nos avisara que no se consiguió nada:
+
+![web9](./media/readme/blogreadme4.jpg)
+
+Si consigue, nos muestra nuestro post:
+
+![web10](./media/readme/blogreadme5.jpg)
+
+Sobre las publicaciones, si un administrador es quien esta logueado, los cards nos da la posibilidad de entrar a edición o eliminar de una vez:
+
+![web11](./media/readme/blogreadme6.jpg)
+ 
+ en un usuario sin permisos de administrador sale asi:
+
+![web12](./media/readme/blogreadme7.jpg)
+
+Para agregar un post, si el usuario no tiene permiso, nos sale el error:
+
+![web13](./media/readme/blogreadme8.jpg)
+
+Para leer un post, hacemos click en ***Leer más*
+
+![web14](./media/readme/blogreadme9.jpg)
+
+Nos dirige al artículo completo, aqui vemos que en la parte superior estan os botones de edicion y borrado
+
+![web15](./media/readme/blogreadme10.jpg)
+
+Si no tenemos permiso saldra un error:
+
+![web15](./media/readme/blogreadme11.jpg)
+
+Para crear una publicacion presionamos **Create Post**
+
+![web16](./media/readme/blogreadme12.jpg)
+
+Se abre un formulario de edición:
+
+![web17](./media/readme/blogreadme13.jpg)
+
+Si presionamos editar en la vista detallada de la publicacion nos lleva a otro formulario y tenemos la posibilidad de eliminarlo también desde la edición
+
+![web18](./media/readme/blogreadme14.jpg)
+
+**Mensajeria**
+
+Al ingresar a mensajeria (por el navbar o el footer) tenemos la lista de usuarios a la cual podemos chatear:
+
+![web19](./media/readme/chatreadme1.jpg)
+
+Para un usuario común el card sale asi:
+
+![web20](./media/readme/chatreadme2.jpg)
+
+Para el usuario administrador, se habilita las opciones de asignar permisos y de eliminar usuarios:
+
+![web21](./media/readme/chatreadme3.jpg)
+
+Si el usuario ya creo el perfil, se puede hacer click en su foto y nos llevara a su perfil de usuario, desde la cual podemos ir al chat o regresar:
+
+![web22](./media/readme/chatreadme4.jpg)
+
+Si seleccionamos enviar mensaje (en el perfil de usuario o en el card) nos lleva a la sala de chat, ahi podemos escribir:
+
+![web23](./media/readme/chatreadme5.jpg)
+
+La otra persona nos responde:
+
+![web24](./media/readme/chatreadme6.jpg)
+
+No es un chat en tiempo real, no usa channels, es solo una publicación de mensajes, estilo blog o foro pero en privado; se actualiza cuando se envia un mensaje o cuando se refrezca la página
+
+finalmente la página About, trata de informacion del desarrollador de la página, a peticion de los paramatros de entrega para el proyecto:
+
+![web25](./media/readme/aboutreadme1.jpg)
 
 >Otros datos
 
 * Se usó herancia de templates, teniendo como base index.HTML y en los demás HTML se uso jinja2 para heredar navbar, footers, vínculos y para validaciones como **if** y ciclo **for**
 
-* En App_1 esta el folder **static** que contiene el archivo css y las imágenes usadas en el favicon, readme y el Hero de la página Home.
+* En **users** esta el folder **static** que contiene el archivo css y las imágenes usadas en el favicon, readme y el Hero de la página Home.
 
 * Se deja el archivo **requirements.txt** para replicar el entorno virtual
 
-* Se añadieron a admin.py de App_1 los modelos para que aparezcan en el panel de administracion y puedan ser editados desde ahí.
+* Se añadieron a admin.py los modelos para que aparezcan en el panel de administración y puedan ser editados desde ahí.
 
-* En setting de Preentrega_3 folder, se añadió ]`LOGIN_URL = "login"` para que las rutas protegidas se redirijan a **login** si no hay sesión 
+* En setting de Proyecto_final, se añadió `LOGIN_URL = "login"` para que las rutas protegidas se redirijan a **login** si no hay sesión
+
+* Se usó una animacion tomada de la página de LottieFiles para la vista cuando no hay publicaciones en el Blog
+
+* Se realizaron Unit Test, los códigos estan en los respectivos tests.py de cada aplicación.
+
+* En root, en el folder **test** se encuentra un PDF con un pequeño informe con los resultados de las pruebas realizadas y quedan 3 txt con los reportes generados en las pruebas.
+
+* El video con el funcionamiento del website puede verse en:
 
 ## Autor✒️
 

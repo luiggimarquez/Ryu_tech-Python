@@ -22,7 +22,9 @@
             {% if request.user.last_name %}
             <p><span class="nameProfile">Apellido:</span>  {{request.user.last_name}}</p>
             {% endif %}
+            {% if request.user.email %}
             <p><span class="nameProfile">Email:</span>  {{request.user.email}}</p>
+            {% endif %}
             {% if equest.user.profile.bio %}
             <p><span class="nameProfile">Bio:</span>  {{request.user.profile.bio}}</p>
             {% endif %}

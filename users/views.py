@@ -119,7 +119,7 @@ def edituser(request):
 
             user.save()
             login(request, user)
-            return redirect('home')
+            return redirect('profile')
         
         return render(request,"edituser.html", {
             'form': editUserForm(user=request.user), 'errors':form.errors
