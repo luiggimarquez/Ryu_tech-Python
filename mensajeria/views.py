@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, Permission
-from .models import ChatRoom, MessagesChat
-from users.models import Profile
-from django.contrib.auth.decorators import login_required 
+from .models import MessagesChat
+from django.contrib.auth.decorators import login_required
 from django.http import  HttpResponse
 from django.contrib import messages
 
@@ -24,7 +23,6 @@ def usersProfile(request):
         user.save()
         messages.success(request, f"Permiso '{access}' asignado con éxito")
 
-
     return render(request, 'mensajeria/profilesMessages.html',{
         'usuarios':users, 'canDelete':canDelete})
 
@@ -33,14 +31,6 @@ def usersProfile(request):
 def getMessages(request, id):
     user = request.user
     receiver = User.objects.get(id=id)
-    chat_rooms = ChatRoom.objects.filter(users__in=[user, receiver])
-    
-    if chat_rooms.exists():
-        chat_room = chat_rooms.first()
-    else:
-        chat_room = ChatRoom.objects.create()
-        chat_room.users.add(user, receiver)
-
     messages = MessagesChat.objects.all()
 
     message=[]
@@ -54,7 +44,7 @@ def getMessages(request, id):
    
     return render(request, 'mensajeria/chatRoom.html', {'messages': message, 'id': id, 'receiver':receiver})
 
- 
+
 @login_required 
 def sendMessage(request):
     from django.db.models import Q
@@ -63,19 +53,8 @@ def sendMessage(request):
     if (request.method == 'POST'):
         message = request.POST['message'] 
         receiver_id = request.POST['receiver']
-
         receiver = User.objects.get(id=receiver_id)
-        chat_room = ChatRoom.objects.filter(Q(users=user) & Q(users=receiver)).first()
-
-        if not chat_room:
-            # Si la sala de chat no existe, crearla
-            chat_room = ChatRoom.objects.create()
-            chat_room.users.add(user, receiver)
-            
         message = MessagesChat.objects.create(sender=request.user, receiver=receiver, message=message) 
-
-        #chat_rooms = ChatRoom.objects.get((Q(users=user.id) & Q(users=receiver_id)))
-        chat_room.messages.add(message) 
 
         return redirect('chatroom-getmsgs',  id=receiver_id)
     else:

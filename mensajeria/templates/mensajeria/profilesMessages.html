@@ -68,9 +68,10 @@
                         {% endif %}
                         <div class="padding">
 
-                            <button class="button">
-                                <a href="{% url 'chatroom-getmsgs' data.id %}" class="link">Enviar Mensaje</a>
-                            </button>
+                            <a href="{% url 'chatroom-getmsgs' data.id %}" class="link">
+                                <button class="button">Enviar Mensaje</button>
+                            </a>
+                            
 
                         </div>
                     </div>
